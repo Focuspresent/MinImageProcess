@@ -9,6 +9,11 @@ set(CMAKE_AUTORCC ON)
 
 #找Qt组件
 find_package(Qt5 COMPONENTS Widgets Core Gui REQUIRED)
+
+#找OpenCv库
+set(OpenCV_DIR "d:/OpenCv/opencv/opencv_build/install/x64/mingw/lib")
+find_package(OpenCV REQUIRED)
+
 #添加源文件
 aux_source_directory(. SRCS)
 
@@ -19,5 +24,7 @@ add_library(${LIB_NAME}
 #头文件
 set(LIB_INCLUDE "${CMAKE_CURRENT_BINARY_DIR}/${LIB_NAME}_autogen/include")
 target_include_directories(${LIB_NAME} PUBLIC ${LIB_INCLUDE})
+target_include_directories(${LIB_NAME} PUBLIC ${OpenCV_INCLUDE_DIRS})
 #连接第三库
 target_link_libraries(${LIB_NAME} PUBLIC Qt5::Widgets Qt5::Core Qt5::Gui)
+target_link_libraries(${LIB_NAME} PUBLIC ${OpenCV_LIBS})
