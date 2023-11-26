@@ -1,4 +1,5 @@
 #include "MainInterface.h"
+#include "Tool.hpp"
 
 MainInterface::MainInterface(QWidget* parent)
     :QMainWindow(parent)
