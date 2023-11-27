@@ -1,7 +1,6 @@
 #pragma once
 #include "ui_MainInterface.h"
 #include <QMainWindow>
-#include <QString>
 
 class MainInterface : public QMainWindow {
     Q_OBJECT

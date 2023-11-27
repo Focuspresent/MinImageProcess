@@ -21,7 +21,7 @@
 - vscode
 ### 主要框架
 ```
--MIPN
+-MIP
  -README.md
  -CMakeLists.txt
  -build
@@ -33,6 +33,29 @@
   -CMakeLists.txt
 
 ```
+### 分类
+#### 图像编辑：Image editing
+- 构图（裁剪）Composition (cropping)
+- 旋转 Spin
+- 曝光 Exposure
+- 亮度 Brightness
+- 对比度 Contrast ratio
+- 直方图均衡化 Histogram equalization
+- 锐化 Sharpen
+- 平滑 Smooth
+#### 色彩调整功能：Color adjustment
+- 光感 Light sense
+- 曲线调整 Curve adjustment
+- 饱和度调整 Saturation adjustment
+- 曲线调色 Curve tone
+- HSL（色相、饱和度、亮度）HSL (Hue, saturation, brightness)
+#### 其他功能：Others
+- 色温 Color temperature
+- 色调 Tone
+- 文字 Text
+- 去雾 Clear the fog
+- 水印 Watermark
+- 美颜 Beauty
 ### 功能实现
 #### 必选功能
 - 构图（裁剪）：使用 `cv::Rect` 和 `cv::Mat` 的 `operator()` 运算符来切割图像

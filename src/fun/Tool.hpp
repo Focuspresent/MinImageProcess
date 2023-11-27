@@ -12,6 +12,7 @@
 #include <bits/stdc++.h>
 
 #define TGI Tool::getInstance()
+#define FUN
 
 class Tool{
 public:
@@ -37,6 +38,15 @@ public:
     //读取CurMat;
     cv::Mat getCurMat(){
         return CurMat;
+    }
+
+    //设置CurMat;
+    void setCurMat(cv::Mat&& Input){
+        CurMat=std::move(Input);
+    }
+    //设置CurMat;
+    void setCurMat(cv::Mat Input){
+        CurMat=std::move(Input);
     }
 private:
     //私有化
