@@ -9,4 +9,4 @@
 
 
 
-#endif
+#endif //COLORADJUST_H

@@ -8,4 +8,4 @@
 #include "Tool.hpp"
 
 
-#endif
+#endif //IMAGEEDIT_H
