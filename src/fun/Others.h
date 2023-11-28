@@ -7,5 +7,6 @@
 
 #include "Tool.hpp"
 
+void Beauty();
 
 #endif //OTHERS_H

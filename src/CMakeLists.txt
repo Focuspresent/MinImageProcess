@@ -17,6 +17,7 @@ find_package(OpenCV REQUIRED)
 #添加源文件
 aux_source_directory(. SRCS)
 aux_source_directory(./fun SRCS)
+aux_source_directory(./interface SRCS)
 
 #生成库
 add_library(${LIB_NAME}
@@ -27,6 +28,7 @@ set(LIB_INCLUDE "${CMAKE_CURRENT_BINARY_DIR}/${LIB_NAME}_autogen/include")
 target_include_directories(${LIB_NAME} PUBLIC ${LIB_INCLUDE})
 target_include_directories(${LIB_NAME} PUBLIC ${OpenCV_INCLUDE_DIRS})
 target_include_directories(${LIB_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/fun)
+target_include_directories(${LIB_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/interface)
 #连接第三库
 target_link_libraries(${LIB_NAME} PUBLIC Qt5::Widgets Qt5::Core Qt5::Gui)
 target_link_libraries(${LIB_NAME} PUBLIC ${OpenCV_LIBS})

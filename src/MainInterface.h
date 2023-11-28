@@ -4,8 +4,11 @@
 #include "ui_MainInterface.h"
 #include <QMainWindow>
 #include <QFileDialog>
+#include <QMouseEvent>
+#include <QResizeEvent>
 #include <QImage>
-#include "Tool.hpp"
+#include <QDebug>
+#include "QComposition.h"
 
 class MainInterface : public QMainWindow {
     Q_OBJECT
@@ -13,6 +16,10 @@ class MainInterface : public QMainWindow {
 public:
     MainInterface(QWidget* parent = nullptr);
     ~MainInterface();
+protected:
+    void mousePressEvent(QMouseEvent* event) override;
+    void resizeEvent(QResizeEvent *event) override;
+    void moveEvent(QMoveEvent *event) override;
 public slots:
     void OpenImage();
     void MatToShow();

@@ -15,6 +15,7 @@
 #define TGI Tool::getInstance()
 #define TGMAT Tool::getInstance().getCurMat()  
 #define FUN
+#define DEBUG
 
 class Tool{
 public:

@@ -128,16 +128,34 @@
     <property name="title">
      <string>编辑(&amp;E)</string>
     </property>
+    <addaction name="ac_crop"/>
+    <addaction name="ac_spin"/>
+    <addaction name="ac_exp"/>
+    <addaction name="ac_bri"/>
+    <addaction name="ac_conra"/>
+    <addaction name="ac_hisequ"/>
+    <addaction name="ac_sha"/>
+    <addaction name="ac_smo"/>
    </widget>
    <widget class="QMenu" name="menu_color">
     <property name="title">
      <string>色彩(&amp;C)</string>
     </property>
+    <addaction name="ac_lis"/>
+    <addaction name="ac_curadj"/>
+    <addaction name="ac_satadj"/>
+    <addaction name="ac_hsl"/>
    </widget>
    <widget class="QMenu" name="menu_others">
     <property name="title">
      <string>其它(&amp;W)</string>
     </property>
+    <addaction name="ac_coltem"/>
+    <addaction name="ac_tone"/>
+    <addaction name="ac_text"/>
+    <addaction name="ac_clearfog"/>
+    <addaction name="ac_watermark"/>
+    <addaction name="ac_beauty"/>
    </widget>
    <addaction name="menu_file"/>
    <addaction name="menu_edit"/>
@@ -153,6 +171,96 @@
   <action name="save">
    <property name="text">
     <string>保存(&amp;S)</string>
+   </property>
+  </action>
+  <action name="ac_crop">
+   <property name="text">
+    <string>构图</string>
+   </property>
+  </action>
+  <action name="ac_spin">
+   <property name="text">
+    <string>旋转</string>
+   </property>
+  </action>
+  <action name="ac_exp">
+   <property name="text">
+    <string>曝光</string>
+   </property>
+  </action>
+  <action name="ac_bri">
+   <property name="text">
+    <string>亮度</string>
+   </property>
+  </action>
+  <action name="ac_conra">
+   <property name="text">
+    <string>对比度</string>
+   </property>
+  </action>
+  <action name="ac_sha">
+   <property name="text">
+    <string>锐化</string>
+   </property>
+  </action>
+  <action name="ac_smo">
+   <property name="text">
+    <string>平滑</string>
+   </property>
+  </action>
+  <action name="ac_lis">
+   <property name="text">
+    <string>光感</string>
+   </property>
+  </action>
+  <action name="ac_curadj">
+   <property name="text">
+    <string>曲线调整</string>
+   </property>
+  </action>
+  <action name="ac_satadj">
+   <property name="text">
+    <string>饱和度调整</string>
+   </property>
+  </action>
+  <action name="ac_hsl">
+   <property name="text">
+    <string>HSL</string>
+   </property>
+  </action>
+  <action name="ac_coltem">
+   <property name="text">
+    <string>色温</string>
+   </property>
+  </action>
+  <action name="ac_tone">
+   <property name="text">
+    <string>色调</string>
+   </property>
+  </action>
+  <action name="ac_text">
+   <property name="text">
+    <string>文字</string>
+   </property>
+  </action>
+  <action name="ac_clearfog">
+   <property name="text">
+    <string>去雾</string>
+   </property>
+  </action>
+  <action name="ac_watermark">
+   <property name="text">
+    <string>水印</string>
+   </property>
+  </action>
+  <action name="ac_beauty">
+   <property name="text">
+    <string>美颜</string>
+   </property>
+  </action>
+  <action name="ac_hisequ">
+   <property name="text">
+    <string>直方图均衡化</string>
    </property>
   </action>
  </widget>

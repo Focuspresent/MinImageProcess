@@ -1,4 +1,5 @@
 #include "MainInterface.h"
+#include "Tool.hpp"
 
 MainInterface::MainInterface(QWidget* parent)
     :QMainWindow(parent)
@@ -30,11 +31,49 @@ void MainInterface::OpenImage()
     MatToShow();
 }
 
-void MainInterface::MatToShow(){
+void MainInterface::MatToShow()
+{   
+    if(TGMAT.empty()){
+        return ;
+    }
     //转成QImage
-    QImage display=QImage(TGMAT.data,TGMAT.cols,TGMAT.rows,TGMAT.cols*TGMAT.channels(),QImage::Format_RGB888);
+    QImage display;
+    if(TGMAT.channels()==3){
+        display=QImage(TGMAT.data,TGMAT.cols,TGMAT.rows,TGMAT.cols*TGMAT.channels(),QImage::Format_RGB888);
+    }else if(TGMAT.channels()==4){
+        display=QImage(TGMAT.data,TGMAT.cols,TGMAT.rows,TGMAT.cols*TGMAT.channels(),QImage::Format_RGBA8888);
+    }
     //放到组件中
     ui->label_show->setPixmap(QPixmap::fromImage(display));
     //适应
-    ui->label_show->setScaledContents(true);
+    ui->label_show->setFixedSize(display.size());
+    //更新显示窗口数据
+    TGI.setShowQRct(ui->label_show->geometry());
+    TGI.setX(this->x()+ui->widget_2->pos().x()+ui->label_show->geometry().x());
+    TGI.setY(this->y()+ui->widget_2->pos().y()+ui->label_show->geometry().y()+ui->menubar->geometry().height());
+}
+
+void MainInterface::mousePressEvent(QMouseEvent* event)
+{
+#ifdef DEBUG 
+    qDebug()<<"event->pos(): "<<event->pos();
+    qDebug()<<"event->globalPos(): "<<event->globalPos();
+    qDebug()<<"ui->widget_2->pos(): "<<ui->widget_2->pos();
+    qDebug()<<"ui->label_show->pos(): "<<ui->label_show->pos();
+    qDebug()<<"ui->label_show->geometry(): "<<ui->label_show->geometry();
+    qDebug()<<"calc x "<<ui->widget_2->pos().x()+ui->label_show->geometry().x();
+    qDebug()<<"calc y "<<ui->widget_2->pos().y()+ui->label_show->geometry().y()+ui->menubar->geometry().height();
+#endif
+}
+
+void MainInterface::resizeEvent(QResizeEvent* event)
+{
+    Q_UNUSED(event);
+    MatToShow();
+}
+
+void MainInterface::moveEvent(QMoveEvent *event)
+{
+    Q_UNUSED(event);
+    MatToShow();
 }
