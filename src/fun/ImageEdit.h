@@ -7,6 +7,8 @@
 
 #include "Tool.hpp"
 
-void Composition(cv::Rect cropRect);
+void Composition(cv::Rect& cropRect);
+void Composition(cv::Rect&& cropRect);
+void Composition(int x,int y,int width,int height);
 
 #endif //IMAGEEDIT_H

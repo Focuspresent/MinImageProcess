@@ -7,11 +7,13 @@ MainInterface::MainInterface(QWidget* parent)
 {
     ui->setupUi(this);
     //数据
-    TGI.setShowQRct(ui->label_show->geometry());
+    ui_qcom=nullptr;
+    TGI.setShowQRect(ui->label_show->geometry());
 
     //连接槽
     connect(ui->pb_open,SIGNAL(clicked()),this,SLOT(OpenImage()));
     connect(ui->open,SIGNAL(triggered()),this,SLOT(OpenImage()));
+    connect(ui->ac_crop,SIGNAL(triggered()),this,SLOT(CreateQCOM()));
 }
 
 MainInterface::~MainInterface()
@@ -31,38 +33,67 @@ void MainInterface::OpenImage()
     MatToShow();
 }
 
+void MainInterface::CreateQCOM()
+{
+    if(TGMAT.empty()){
+        #ifdef DEBUG
+            qDebug()<<"CurMat Empty";
+        #endif 
+        return ;
+    }
+    if(ui_qcom!=nullptr){
+        delete ui_qcom;
+        ui_qcom=nullptr;
+    }
+    ui_qcom=new QComposition();
+    ui_qcom->show();
+    connect(ui_qcom,SIGNAL(ChangeCurMat()),this,SLOT(MatToShow()));
+}
+
 void MainInterface::MatToShow()
 {   
     if(TGMAT.empty()){
+        #ifdef DEBUG
+            qDebug()<<"CurMat Empty";
+        #endif 
         return ;
     }
     //转成QImage
     QImage display;
     if(TGMAT.channels()==3){
-        display=QImage(TGMAT.data,TGMAT.cols,TGMAT.rows,TGMAT.cols*TGMAT.channels(),QImage::Format_RGB888);
+        display=QImage(TGMAT.data,TGMAT.cols,TGMAT.rows,static_cast<int>(TGMAT.step),QImage::Format_RGB888);
     }else if(TGMAT.channels()==4){
-        display=QImage(TGMAT.data,TGMAT.cols,TGMAT.rows,TGMAT.cols*TGMAT.channels(),QImage::Format_RGBA8888);
+        display=QImage(TGMAT.data,TGMAT.cols,TGMAT.rows,static_cast<int>(TGMAT.step),QImage::Format_RGBA8888);
     }
     //放到组件中
     ui->label_show->setPixmap(QPixmap::fromImage(display));
     //适应
     ui->label_show->setFixedSize(display.size());
     //更新显示窗口数据
-    TGI.setShowQRct(ui->label_show->geometry());
-    TGI.setX(this->x()+ui->widget_2->pos().x()+ui->label_show->geometry().x());
-    TGI.setY(this->y()+ui->widget_2->pos().y()+ui->label_show->geometry().y()+ui->menubar->geometry().height());
+    TGI.setX(this->geometry().x()+ui->widget_2->pos().x()+ui->label_show->geometry().x());
+    TGI.setY(this->geometry().y()+ui->widget_2->pos().y()+ui->label_show->geometry().y()+ui->menubar->geometry().height());
+    TGI.setWidth(ui->label_show->geometry().width());
+    TGI.setHeight(ui->label_show->geometry().height());
 }
 
 void MainInterface::mousePressEvent(QMouseEvent* event)
 {
+    Q_UNUSED(event);
+    MatToShow();
 #ifdef DEBUG 
     qDebug()<<"event->pos(): "<<event->pos();
     qDebug()<<"event->globalPos(): "<<event->globalPos();
     qDebug()<<"ui->widget_2->pos(): "<<ui->widget_2->pos();
     qDebug()<<"ui->label_show->pos(): "<<ui->label_show->pos();
     qDebug()<<"ui->label_show->geometry(): "<<ui->label_show->geometry();
-    qDebug()<<"calc x "<<ui->widget_2->pos().x()+ui->label_show->geometry().x();
-    qDebug()<<"calc y "<<ui->widget_2->pos().y()+ui->label_show->geometry().y()+ui->menubar->geometry().height();
+    qDebug()<<"calc pos() x "<<ui->widget_2->pos().x()+ui->label_show->geometry().x();
+    qDebug()<<"calc pos() y "<<ui->widget_2->pos().y()+ui->label_show->geometry().y()+ui->menubar->geometry().height();
+    qDebug()<<"frameGeometry() "<<this->frameGeometry();
+    qDebug()<<"geometry() "<<this->geometry();
+    qDebug()<<"calc globalpos() x "<<this->geometry().x()+ui->widget_2->pos().x()+ui->label_show->geometry().x();
+    qDebug()<<"calc globalpos() y"<<this->geometry().y()+ui->widget_2->pos().y()+ui->label_show->geometry().y()+ui->menubar->geometry().height();
+    qDebug()<<"TGI.ShowQRect() "<<TGI.ShowQRect();
+    qDebug()<<"";
 #endif
 }
 

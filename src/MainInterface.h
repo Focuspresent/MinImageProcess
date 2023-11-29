@@ -6,6 +6,7 @@
 #include <QFileDialog>
 #include <QMouseEvent>
 #include <QResizeEvent>
+#include <QPushButton>
 #include <QImage>
 #include <QDebug>
 #include "QComposition.h"
@@ -22,9 +23,11 @@ protected:
     void moveEvent(QMoveEvent *event) override;
 public slots:
     void OpenImage();
+    void CreateQCOM();
     void MatToShow();
 private:
     Ui_MainInterface* ui;
+    QComposition* ui_qcom;
 };
 
 #endif // MAININTERFACE_H

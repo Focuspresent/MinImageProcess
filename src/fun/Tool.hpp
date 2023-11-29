@@ -10,10 +10,16 @@
 #include <opencv2/opencv.hpp>
 #include <QString>
 #include <QRect>
+#include <QPoint>
 #include <bits/stdc++.h>
 
 #define TGI Tool::getInstance()
-#define TGMAT Tool::getInstance().getCurMat()  
+#define TGMAT Tool::getInstance().getCurMat() 
+#define TGQTL Tool::getInstance().TopLeft()
+#define TGQTR Tool::getInstance().TopRight()
+#define TGQBL Tool::getInstance().BottomLeft()
+#define TGQBR Tool::getInstance().BottomRight()
+#define NVal 2
 #define FUN
 #define DEBUG
 
@@ -51,6 +57,48 @@ public:
 
     void WriteCurMat(const QString& filename){
         cv::imwrite(filename.toLocal8Bit().toStdString(),CurMat);
+    }
+
+    //看是否临近
+    bool Is_Near(int x1,int y1,int x2,int y2){
+        if(abs(x1-x2)>NVal) return false;
+        if(abs(y1-y2)>NVal) return false;
+        return true;
+    }
+
+    bool Is_Near(int x,int y){
+        if(abs(x-y)>NVal) return false;
+        return true;
+    }
+
+    bool Is_Near(QPoint p1,QPoint p2){
+        return Is_Near(p1.x(),p1.y(),p2.x(),p2.y());
+    }
+
+    bool Is_Near(QPoint p,int x,int y){
+        return Is_Near(p.x(),p.y(),x,y);
+    }
+
+    //是否临近这条线(矩阵的一条边)
+    bool Is_Near(int x,int y,int x1,int y1,int x2,int y2){
+        if(y1==y2){
+            if(!Is_Near(y,y1)) return false;
+            for(int x3=std::min(x1,x2);x3<=std::max(x1,x2);x3++){
+                if(Is_Near(x,x3)) return true;
+            }
+            return false;   
+        }else if(x1==x2){
+            if(!Is_Near(x,x1)) return false;
+            for(int y3=std::min(y1,y2);y3<=std::max(y1,y2);y3++){
+                if(Is_Near(y,y3)) return true;
+            }
+            return false; 
+        }
+        return false;
+    }
+
+    bool Is_Near(QPoint p,QPoint p1,QPoint p2){
+        return Is_Near(p.x(),p.y(),p1.x(),p1.y(),p2.x(),p2.y());
     }
 
     //操作数据
@@ -94,6 +142,26 @@ public:
         return std::move(QRect(x,y,width,height));
     }
 
+    QPoint ShowQPoint(){
+        return std::move(QPoint(x,y));
+    }
+
+    QPoint TopLeft(){
+        return std::move(QPoint(x,y));
+    }
+
+    QPoint TopRight(){
+        return std::move(QPoint(x+width,y));
+    }
+
+    QPoint BottomLeft(){
+        return std::move(QPoint(x,y+height));
+    }
+
+    QPoint BottomRight(){
+        return std::move(QPoint(x+width,y+height));
+    }
+
     //设置窗口数据
     void setX(int x){
         this->x=x;
@@ -125,14 +193,14 @@ public:
         setHeight(rect.height);
     }
 
-    void setShowQRct(QRect qrect){
+    void setShowQRect(QRect qrect){
         setX(qrect.x());
         setY(qrect.y());
         setWidth(qrect.width());
         setHeight(qrect.height());
     }
 
-    void setShowQRct(QRect& qrect){
+    void setShowQRect(QRect& qrect){
         setX(qrect.x());
         setY(qrect.y());
         setWidth(qrect.width());
