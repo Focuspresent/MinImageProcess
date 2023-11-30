@@ -16,6 +16,7 @@ MainInterface::MainInterface(QWidget* parent)
     connect(ui->pb_open,SIGNAL(clicked()),this,SLOT(OpenImage()));
     connect(ui->open,SIGNAL(triggered()),this,SLOT(OpenImage()));
     connect(ui->ac_crop,SIGNAL(triggered()),this,SLOT(CreateQCOM()));
+    connect(ui->ac_spin,SIGNAL(triggered()),this,SLOT(MakeSpin()));
 }
 
 MainInterface::~MainInterface()
@@ -50,29 +51,45 @@ void MainInterface::CreateQCOM()
     ui_qcom=new QComposition();
     ui_qcom->show();
 
-    if(bt_comfirm!=nullptr){
-        delete bt_comfirm;
-        bt_comfirm=nullptr;
-    }
-    bt_comfirm=new QPushButton(this);
-    bt_comfirm->setWindowFlags(Qt::FramelessWindowHint);
-    bt_comfirm->show();
-    bt_comfirm->setGeometry(0,ui->menubar->height(),30,30);
-
-    if(bt_cancel!=nullptr){
-        delete bt_cancel;
-        bt_cancel=nullptr;
-    }
-    bt_cancel=new QPushButton(this);
-    bt_cancel->setWindowFlags(Qt::FramelessWindowHint);
-    bt_cancel->show();
-    bt_cancel->setGeometry(bt_comfirm->geometry().width(),ui->menubar->height(),30,30);
+    CreateComAndCan();
 
     connect(ui_qcom,SIGNAL(ChangeCurMat()),this,SLOT(MatToShow()));
     connect(bt_comfirm,SIGNAL(clicked()),ui_qcom,SLOT(CropCurMat()));
     connect(bt_comfirm,SIGNAL(clicked()),this,SLOT(DeleteButton()));
     connect(bt_cancel,&QPushButton::clicked,this,&MainInterface::DeleteButton);
 }
+
+void MainInterface::MakeSpin()
+{
+    if(TGMAT.empty()){
+        #ifdef DEBUG
+            qDebug()<<"CurMat Empty";
+        #endif 
+        return ;
+    }
+    if(slider!=nullptr){
+        delete slider;
+        slider=nullptr;
+    }
+    slider = new QSlider(Qt::Horizontal, this);
+    slider->setRange(-45,45);
+    slider->setValue(0);
+    slider->show();
+    slider->setGeometry(50,height()-30,160,22);
+
+    CreateComAndCan();
+
+    connect(slider,&QSlider::valueChanged,[this](int pos)->void{
+        Spin(pos,true);
+        MatToShow();
+    });
+    connect(bt_comfirm,&QPushButton::clicked,[this]()->void{
+        TGI.Comfirm();
+        DeleteButton();
+    });
+    connect(bt_cancel,&QPushButton::clicked,this,&MainInterface::DeleteButton);
+}
+
 
 void MainInterface::MatToShow()
 {   
@@ -138,6 +155,31 @@ void MainInterface::DeleteButton()
     if(bt_comfirm) delete bt_comfirm;
     if(bt_cancel) delete bt_cancel;
     if(ui_qcom) delete ui_qcom;
+    if(slider) delete slider;
+    slider=nullptr;
     ui_qcom=nullptr;
     bt_comfirm=bt_cancel=nullptr;
+}
+
+void MainInterface::CreateComAndCan()
+{
+    if(bt_comfirm!=nullptr){
+        delete bt_comfirm;
+        bt_comfirm=nullptr;
+    }
+    bt_comfirm=new QPushButton(this);
+    bt_comfirm->setWindowFlags(Qt::FramelessWindowHint);
+    bt_comfirm->show();
+    bt_comfirm->setText("确定");
+    bt_comfirm->setGeometry(0,ui->menubar->height(),60,30);
+
+    if(bt_cancel!=nullptr){
+        delete bt_cancel;
+        bt_cancel=nullptr;
+    }
+    bt_cancel=new QPushButton(this);
+    bt_cancel->setWindowFlags(Qt::FramelessWindowHint);
+    bt_cancel->show();
+    bt_cancel->setText("取消");
+    bt_cancel->setGeometry(bt_comfirm->geometry().width(),ui->menubar->height(),60,30);
 }

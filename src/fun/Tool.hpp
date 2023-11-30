@@ -15,6 +15,7 @@
 
 #define TGI Tool::getInstance()
 #define TGMAT Tool::getInstance().getCurMat() 
+#define TGOMAT Tool::getInstance().getOriginMat()
 #define TGQTL Tool::getInstance().TopLeft()
 #define TGQTR Tool::getInstance().TopRight()
 #define TGQBL Tool::getInstance().BottomLeft()
@@ -41,6 +42,7 @@ public:
         CurMat=cv::imread(FileName.toLocal8Bit().toStdString());
         //转成RGB
         cv::cvtColor(CurMat,CurMat,cv::COLOR_BGR2RGB);
+        OriginMat=CurMat;
     }
 
     void ReadCurMat(const QString& filename){
@@ -48,6 +50,7 @@ public:
         CurMat=cv::imread(filename.toLocal8Bit().toStdString());
         //转成RGB
         cv::cvtColor(CurMat,CurMat,cv::COLOR_BGR2RGB);
+        OriginMat=CurMat;
     }
 
     //保存图片到某个路径
@@ -116,11 +119,20 @@ public:
         return CompareQPoint(p1.x(),p1.y(),p2.x(),p2.y());
     }
 
+    //确认操作
+    void Comfirm(){
+        OriginMat=CurMat;
+    }
+
     //操作数据
 
     //读取CurMat;
     cv::Mat getCurMat(){
         return CurMat;
+    }
+
+    cv::Mat getOriginMat(){
+        return OriginMat;
     }
 
     //设置CurMat;
@@ -130,6 +142,14 @@ public:
 
     void setCurMat(cv::Mat Input){
         CurMat=std::move(Input);
+    }
+
+    void setOriginMat(cv::Mat&& Input){
+        OriginMat=std::move(Input);
+    }
+
+    void setOriginMat(cv::Mat Input){
+        OriginMat=std::move(Input);
     }
 
     //读取窗口数据
@@ -232,6 +252,8 @@ private:
 
     //显示的图片
     cv::Mat CurMat;
+    //可以回退的图片
+    cv::Mat OriginMat;
     //显示窗口的数据
     int x,y;
     int width,height;

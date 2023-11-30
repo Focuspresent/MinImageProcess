@@ -11,6 +11,7 @@ QComposition::QComposition(QWidget* parent)
     is_neartl=is_neartr=is_nearbl=is_nearbr=false;
 
     setWindowFlags(Qt::FramelessWindowHint);
+    setMinimumSize(5,5);
     setWindowOpacity(0.5);
     setGeometry(TGI.ShowQRect());
 }

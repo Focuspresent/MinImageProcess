@@ -9,7 +9,9 @@
 #include <QPushButton>
 #include <QImage>
 #include <QDebug>
+#include <QSlider>
 #include "QComposition.h"
+#include "ImageEdit.h"
 
 class MainInterface : public QMainWindow {
     Q_OBJECT
@@ -17,7 +19,7 @@ class MainInterface : public QMainWindow {
 public:
     MainInterface(QWidget* parent = nullptr);
     ~MainInterface();
-    void DisplayOthers();
+    void CreateComAndCan();
 protected:
     void mousePressEvent(QMouseEvent* event) override;
     void resizeEvent(QResizeEvent *event) override;
@@ -25,12 +27,14 @@ protected:
 public slots:
     void OpenImage();
     void CreateQCOM();
+    void MakeSpin();
     void MatToShow();
     void DeleteButton();
 private:
     Ui_MainInterface* ui;
     QComposition* ui_qcom;
     QPushButton *bt_comfirm,*bt_cancel;
+    QSlider* slider;
 };
 
 #endif // MAININTERFACE_H

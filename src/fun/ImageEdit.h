@@ -10,5 +10,6 @@
 void Composition(cv::Rect& cropRect);
 void Composition(cv::Rect&& cropRect);
 void Composition(int x,int y,int width,int height);
+void Spin(double angle,bool flag=false);
 
 #endif //IMAGEEDIT_H
