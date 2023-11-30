@@ -5,10 +5,13 @@ QComposition::QComposition(QWidget* parent)
     :QWidget(parent)
     ,ui(new Ui_QComposition)
 {   
-    is_near=false;
+    setMouseTracking(true);
+    m_mousePressed = false;
+    m_resizeStarted = false;
+    is_neartl=is_neartr=is_nearbl=is_nearbr=false;
 
     setWindowFlags(Qt::FramelessWindowHint);
-    setAttribute(Qt::WA_TranslucentBackground);
+    setWindowOpacity(0.5);
     setGeometry(TGI.ShowQRect());
 }
 
@@ -19,29 +22,57 @@ QComposition::~QComposition()
 
 void QComposition::mousePressEvent(QMouseEvent* event)
 {
-    if(event->button()!=Qt::LeftButton){
-        return ;
+    if (event->button() == Qt::LeftButton) {
+        m_mousePressed = true;
+        m_resizeStartPosition = event->pos();
+        m_resizeStartGeometry = geometry();
+        if(TGI.Is_Near(event->globalPos(),TopLeft())){
+            is_neartl=true;
+        }else if(TGI.Is_Near(event->globalPos(),TopRight())){
+            is_neartr=true;
+        }else if(TGI.Is_Near(event->globalPos(),BottomLeft())){
+            is_nearbl=true;
+        }else if(TGI.Is_Near(event->globalPos(),BottomRight())){
+            is_nearbr=true;
+        }
     }
 }
 
 void QComposition::mouseMoveEvent(QMouseEvent* event)
-{
-    if(is_near){
-        QPoint delta = event->globalPos()-global;
-        // 计算新的窗口大小
-        int newWidth = qsize.width() + delta.x();
-        int newHeight = qsize.height() + delta.y();
-        // 缩放窗口
-        resize(newWidth, newHeight);
+{   
+    if (m_mousePressed) {
+        QPoint delta = event->pos() - m_resizeStartPosition;
+        QRect newGeometry = m_resizeStartGeometry;
+        if (is_nearbr) {
+            newGeometry.setWidth(m_resizeStartGeometry.width() + delta.x());
+            newGeometry.setHeight(m_resizeStartGeometry.height() + delta.y());
+        } else if (is_neartl) {
+            if(TGI.CompareQPoint(TGQTL,event->globalPos())!=TGI.BR) return ;
+            newGeometry.setTopLeft(m_resizeStartGeometry.topLeft() + delta);
+            newGeometry.setWidth(m_resizeStartGeometry.width() - delta.x());
+            newGeometry.setHeight(m_resizeStartGeometry.height() - delta.y());
+        } else if (is_neartr) {
+            if(TGI.CompareQPoint(TGQTR,event->globalPos())!=TGI.BL) return ;
+            newGeometry.setTopRight(m_resizeStartGeometry.topRight() + delta);
+            newGeometry.setHeight(m_resizeStartGeometry.height() - delta.y());
+        } else if (is_nearbl) {
+            if(TGI.CompareQPoint(TGQBL,event->globalPos())!=TGI.TR) return ;
+            newGeometry.setBottomLeft(m_resizeStartGeometry.bottomLeft() + delta);
+            newGeometry.setWidth(m_resizeStartGeometry.width() - delta.x());
+            newGeometry.setHeight(m_resizeStartGeometry.height() + delta.y());
+        }
+        setGeometry(newGeometry);
+        setMaximumSize(MaxQSize(TopLeft(),TGQBR));
     }
 }
 
 void QComposition::mouseReleaseEvent(QMouseEvent* event)
 {
-    if(event->button()!=Qt::LeftButton){
-        return ;
+    if (event->button() == Qt::LeftButton) {
+        m_mousePressed = false;
+        m_resizeStarted = false;
+        is_neartl=is_neartr=is_nearbl=is_nearbr=false;
     }
-    is_near=false;
 }
 
 void QComposition::paintEvent(QPaintEvent* event)
@@ -77,7 +108,12 @@ QPoint QComposition::BottomRight()
 
 void QComposition::CropCurMat()
 {
-    
+    Composition(geometry().x()-TGI.X(),geometry().y()-TGI.Y(),geometry().width(),geometry().height());
     emit ChangeCurMat();
-    delete this;
+}
+
+//p1<p2
+QSize QComposition::MaxQSize(QPoint p1,QPoint p2)
+{
+    return std::move(QSize(p2.x()-p1.x(),p2.y()-p1.y()));
 }

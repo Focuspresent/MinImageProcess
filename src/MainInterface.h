@@ -17,6 +17,7 @@ class MainInterface : public QMainWindow {
 public:
     MainInterface(QWidget* parent = nullptr);
     ~MainInterface();
+    void DisplayOthers();
 protected:
     void mousePressEvent(QMouseEvent* event) override;
     void resizeEvent(QResizeEvent *event) override;
@@ -25,9 +26,11 @@ public slots:
     void OpenImage();
     void CreateQCOM();
     void MatToShow();
+    void DeleteButton();
 private:
     Ui_MainInterface* ui;
     QComposition* ui_qcom;
+    QPushButton *bt_comfirm,*bt_cancel;
 };
 
 #endif // MAININTERFACE_H

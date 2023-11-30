@@ -19,7 +19,7 @@
 #define TGQTR Tool::getInstance().TopRight()
 #define TGQBL Tool::getInstance().BottomLeft()
 #define TGQBR Tool::getInstance().BottomRight()
-#define NVal 2
+#define NVal 3
 #define FUN
 #define DEBUG
 
@@ -31,6 +31,7 @@ public:
         return tool;
     }
 
+    enum Dir{TL,TR,BL,BR};
     //提供方法
 
     //读取图片到CurMat
@@ -99,6 +100,20 @@ public:
 
     bool Is_Near(QPoint p,QPoint p1,QPoint p2){
         return Is_Near(p.x(),p.y(),p1.x(),p1.y(),p2.x(),p2.y());
+    }
+
+    //返回(x2,y2)在(x1,y1)的什么方向上
+    Dir CompareQPoint(int x1,int y1,int x2,int y2){
+        if(x2>x1){
+            if(y2>y1) return Dir::BR;
+            return Dir::TR;
+        }
+        if(y2>y1) return Dir::BL;
+        return Dir::TL;
+    }
+
+    Dir CompareQPoint(QPoint p1,QPoint p2){
+        return CompareQPoint(p1.x(),p1.y(),p2.x(),p2.y());
     }
 
     //操作数据

@@ -8,6 +8,8 @@ MainInterface::MainInterface(QWidget* parent)
     ui->setupUi(this);
     //数据
     ui_qcom=nullptr;
+    bt_comfirm=nullptr;
+    bt_cancel=nullptr;
     TGI.setShowQRect(ui->label_show->geometry());
 
     //连接槽
@@ -47,7 +49,29 @@ void MainInterface::CreateQCOM()
     }
     ui_qcom=new QComposition();
     ui_qcom->show();
+
+    if(bt_comfirm!=nullptr){
+        delete bt_comfirm;
+        bt_comfirm=nullptr;
+    }
+    bt_comfirm=new QPushButton(this);
+    bt_comfirm->setWindowFlags(Qt::FramelessWindowHint);
+    bt_comfirm->show();
+    bt_comfirm->setGeometry(0,ui->menubar->height(),30,30);
+
+    if(bt_cancel!=nullptr){
+        delete bt_cancel;
+        bt_cancel=nullptr;
+    }
+    bt_cancel=new QPushButton(this);
+    bt_cancel->setWindowFlags(Qt::FramelessWindowHint);
+    bt_cancel->show();
+    bt_cancel->setGeometry(bt_comfirm->geometry().width(),ui->menubar->height(),30,30);
+
     connect(ui_qcom,SIGNAL(ChangeCurMat()),this,SLOT(MatToShow()));
+    connect(bt_comfirm,SIGNAL(clicked()),ui_qcom,SLOT(CropCurMat()));
+    connect(bt_comfirm,SIGNAL(clicked()),this,SLOT(DeleteButton()));
+    connect(bt_cancel,&QPushButton::clicked,this,&MainInterface::DeleteButton);
 }
 
 void MainInterface::MatToShow()
@@ -107,4 +131,13 @@ void MainInterface::moveEvent(QMoveEvent *event)
 {
     Q_UNUSED(event);
     MatToShow();
+}
+
+void MainInterface::DeleteButton()
+{
+    if(bt_comfirm) delete bt_comfirm;
+    if(bt_cancel) delete bt_cancel;
+    if(ui_qcom) delete ui_qcom;
+    ui_qcom=nullptr;
+    bt_comfirm=bt_cancel=nullptr;
 }

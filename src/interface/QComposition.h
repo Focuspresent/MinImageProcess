@@ -22,6 +22,7 @@ public:
     QPoint TopRight();
     QPoint BottomLeft();
     QPoint BottomRight();
+    QSize MaxQSize(QPoint p1,QPoint p2);
 signals:
     void ChangeCurMat();
 protected:
@@ -33,9 +34,13 @@ public slots:
     void CropCurMat();
 private:
     Ui_QComposition* ui;
-    bool is_near;
-    QPoint global;
-    QSize qsize;
+    bool is_neartl,is_neartr,is_nearbl,is_nearbr;
+
+    QPoint m_resizeStartPosition;
+    QRect m_resizeStartGeometry;
+    bool m_mousePressed;
+    bool m_resizeStarted;
+    int m_resizeHandleSize;
 };
 
 #endif //QCOMPOSITION_H
