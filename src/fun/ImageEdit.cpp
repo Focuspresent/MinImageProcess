@@ -53,3 +53,33 @@ void Spin(double angle,bool flag)
     //写回
     TGI.setCurMat(SpinedImage);
 }
+
+//曝光
+void Exposure(double alpha,int beta){
+    //读取
+    cv::Mat image=TGOMAT,Expimage;
+    //曝光
+    image.convertTo(Expimage,-1,alpha,beta);
+    //写回
+    TGI.setCurMat(Expimage);
+}
+
+//亮度
+void Brightness(int bright){
+    //读取
+    cv::Mat image=TGOMAT;
+    //增益或减益
+    cv::Mat Briimage=image+cv::Scalar(bright,bright,bright);
+    //写回
+    TGI.setCurMat(Briimage);
+}
+
+//对比度
+void ContrastRatio(double contrast){
+    //读取
+    cv::Mat image=TGOMAT;
+    //对比
+    cv::Mat Conimage=image*contrast;
+    //写回
+    TGI.setCurMat(Conimage);
+}

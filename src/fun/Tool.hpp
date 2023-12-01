@@ -124,6 +124,11 @@ public:
         OriginMat=CurMat;
     }
 
+    //取消操作
+    void Cancel(){
+        CurMat=OriginMat;
+    }
+
     //操作数据
 
     //读取CurMat;

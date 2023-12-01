@@ -11,5 +11,8 @@ void Composition(cv::Rect& cropRect);
 void Composition(cv::Rect&& cropRect);
 void Composition(int x,int y,int width,int height);
 void Spin(double angle,bool flag=false);
+void Exposure(double alpha,int beta);
+void Brightness(int bright);
+void ContrastRatio(double contrast);
 
 #endif //IMAGEEDIT_H

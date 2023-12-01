@@ -10,6 +10,8 @@ MainInterface::MainInterface(QWidget* parent)
     ui_qcom=nullptr;
     bt_comfirm=nullptr;
     bt_cancel=nullptr;
+    slider=nullptr;
+    lineedit=nullptr;
     TGI.setShowQRect(ui->label_show->geometry());
 
     //连接槽
@@ -17,6 +19,9 @@ MainInterface::MainInterface(QWidget* parent)
     connect(ui->open,SIGNAL(triggered()),this,SLOT(OpenImage()));
     connect(ui->ac_crop,SIGNAL(triggered()),this,SLOT(CreateQCOM()));
     connect(ui->ac_spin,SIGNAL(triggered()),this,SLOT(MakeSpin()));
+    connect(ui->ac_exp,SIGNAL(triggered()),this,SLOT(MakeExposure()));
+    connect(ui->ac_bri,SIGNAL(triggered()),this,SLOT(MakeBrightness()));
+    connect(ui->ac_conra,SIGNAL(triggered()),this,SLOT(MakeContrastRatio()));
 }
 
 MainInterface::~MainInterface()
@@ -30,6 +35,8 @@ void MainInterface::OpenImage()
     if(filename.isEmpty()){
         return ;
     }
+    //先前的按钮
+    DeleteButton();
     //读取
     TGI.ReadCurMat(filename);
     //展示
@@ -67,15 +74,7 @@ void MainInterface::MakeSpin()
         #endif 
         return ;
     }
-    if(slider!=nullptr){
-        delete slider;
-        slider=nullptr;
-    }
-    slider = new QSlider(Qt::Horizontal, this);
-    slider->setRange(-45,45);
-    slider->setValue(0);
-    slider->show();
-    slider->setGeometry(50,height()-30,160,22);
+    CreateSliAndLin(-45,45);
 
     CreateComAndCan();
 
@@ -83,11 +82,79 @@ void MainInterface::MakeSpin()
         Spin(pos,true);
         MatToShow();
     });
-    connect(bt_comfirm,&QPushButton::clicked,[this]()->void{
-        TGI.Comfirm();
-        DeleteButton();
+}
+
+void MainInterface::MakeExposure()
+{
+    if(TGMAT.empty()){
+        #ifdef DEBUG
+            qDebug()<<"CurMat Empty";
+        #endif 
+        return ;
+    }
+    //创建水平滑动条
+    CreateSliAndLin(-100,100);
+
+    //确定和取消
+    CreateComAndCan();
+
+    //映射需要的值
+    //?-mi/ma-mi=pos-tmi/tma-tmi
+    double alphaMin=0.5,alphaMax=1.5;
+    int betaMin=-50,betaMax=50;
+    int tma=slider->maximum(),tmi=slider->minimum();
+
+    connect(slider,&QSlider::valueChanged,[this,alphaMin,alphaMax,betaMin,betaMax,tmi,tma](int pos)->void{
+        double alpha=(double)(alphaMax-alphaMin)*((double)(pos-tmi)/(tma-tmi))+alphaMin;
+        int beta=(int)(betaMax-betaMin)*((double)(pos-tmi)/(tma-tmi))+betaMin;
+        Exposure(alpha,beta);
+        MatToShow();
     });
-    connect(bt_cancel,&QPushButton::clicked,this,&MainInterface::DeleteButton);
+}
+
+void MainInterface::MakeBrightness()
+{   
+    if(TGMAT.empty()){
+        #ifdef DEBUG
+            qDebug()<<"CurMat Empty";
+        #endif 
+        return ;
+    }
+    //创建水平滑动条
+    CreateSliAndLin(-100,100);
+
+    //创建确定和取消
+    CreateComAndCan();
+
+    connect(slider,&QSlider::valueChanged,[this](int pos)->void{
+        Brightness(pos);
+        MatToShow();
+    });
+}
+
+void MainInterface::MakeContrastRatio()
+{
+    if(TGMAT.empty()){
+        #ifdef DEBUG
+            qDebug()<<"CurMat Empty";
+        #endif 
+        return ;
+    }
+    //创建水平滑动条
+    CreateSliAndLin(-100,100);
+
+    //创建确定和取消
+    CreateComAndCan();
+
+    //映射
+    double conraMin=0.0,conraMax=2.0;
+    int tma=slider->maximum(),tmi=slider->minimum();
+
+    connect(slider,&QSlider::valueChanged,[this,conraMax,conraMin,tma,tmi](int pos)->void{
+        double conra=(double)(conraMax-conraMin)*((double)(pos-tmi)/(tma-tmi))+conraMin;
+        ContrastRatio(conra);
+        MatToShow();
+    });
 }
 
 
@@ -156,6 +223,8 @@ void MainInterface::DeleteButton()
     if(bt_cancel) delete bt_cancel;
     if(ui_qcom) delete ui_qcom;
     if(slider) delete slider;
+    if(lineedit) delete lineedit;
+    lineedit=nullptr;
     slider=nullptr;
     ui_qcom=nullptr;
     bt_comfirm=bt_cancel=nullptr;
@@ -182,4 +251,48 @@ void MainInterface::CreateComAndCan()
     bt_cancel->show();
     bt_cancel->setText("取消");
     bt_cancel->setGeometry(bt_comfirm->geometry().width(),ui->menubar->height(),60,30);
+
+    connect(bt_comfirm,&QPushButton::clicked,[this]()->void{
+        TGI.Comfirm();
+        DeleteButton();
+    });
+    connect(bt_cancel,&QPushButton::clicked,[this]()->void{
+        TGI.Cancel();
+        MatToShow();
+        DeleteButton();
+    });
+}
+
+void MainInterface::CreateSliAndLin(int MinValue,int MaxValue)
+{
+   if(slider!=nullptr){
+        delete slider;
+        slider=nullptr;
+    }
+    slider = new QSlider(Qt::Horizontal, this);
+    slider->setRange(MinValue,MaxValue);
+    slider->setValue(0);
+    slider->show();
+    slider->setGeometry(50,height()-30,160,22);
+
+    if(lineedit!=nullptr){
+        delete lineedit;
+        lineedit=nullptr;
+    }
+
+    lineedit=new QLineEdit(this);
+    lineedit->setWindowFlags(Qt::FramelessWindowHint);
+    lineedit->setText("0");
+    lineedit->setStyleSheet("border: none;");
+    lineedit->show();
+    lineedit->setGeometry(slider->geometry().x()+slider->geometry().width()/2-slider->geometry().height()/2,slider->geometry().y()-slider->geometry().height(),slider->geometry().height(),slider->geometry().height());
+
+    connect(slider,&QSlider::valueChanged,[this](int pos)->void{
+        lineedit->setText(QString(std::to_string(pos).c_str()));
+        QStyle* style = slider->style();
+        int sliderWidth = style->pixelMetric(QStyle::PM_SliderLength, nullptr, slider);
+        int mi=slider->minimum(),ma=slider->maximum();
+        int x=(int)slider->geometry().width()*((double)abs(pos-mi)/abs(ma-mi));
+        lineedit->setGeometry(slider->geometry().x()-sliderWidth/2+x,slider->geometry().y()-slider->geometry().height(),slider->geometry().height(),slider->geometry().height());
+    });
 }
