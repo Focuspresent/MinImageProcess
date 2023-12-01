@@ -83,3 +83,59 @@ void ContrastRatio(double contrast){
     //写回
     TGI.setCurMat(Conimage);
 }
+
+//直方图均衡化
+void HistogramEqualization(){
+    cv::Mat image = TGOMAT;
+    cv::Mat hsvImage;
+    // 将图像转换为HSV颜色空间
+    cv::cvtColor(image, hsvImage, cv::COLOR_BGR2HSV);
+    std::vector<cv::Mat> channels;
+    // 分离H、S、V通道
+    cv::split(hsvImage, channels);
+    // 对亮度通道进行直方图均衡化
+    cv::equalizeHist(channels[2], channels[2]);
+    // 合并通道  
+    cv::merge(channels, hsvImage);  
+    // 将图像转换回BGR颜色空间
+    cv::cvtColor(hsvImage, hsvImage, cv::COLOR_HSV2BGR); 
+    //写回
+    TGI.setCurMat(hsvImage);
+}
+
+//锐化
+void Sharpen(int level){
+    //读取
+    cv::Mat image=TGOMAT;
+    cv::Mat Shaimage = cv::Mat::zeros(image.size(), image.type());
+    // 创建拉普拉斯滤波器
+    cv::Mat laplacian_filter = (cv::Mat_<float>(3, 3) << 0, -1, 0, -1, 5, -1, 0, -1, 0);
+    // 对彩色图像应用滤波器
+    cv::filter2D(image,Shaimage,-1,laplacian_filter);
+    //根据锐化程度调整
+    double alpha=level/100.0;
+    Shaimage=image+alpha*(Shaimage-image);
+    //写回
+    TGI.setCurMat(Shaimage);
+}
+
+//平滑
+void Smooth(int level){
+    
+}
+
+//色温
+void ColorTemperature(){
+
+}
+
+//色调
+void Tone(int tone){
+    //读取
+    cv::Mat image=TGOMAT,Tonimage;
+    //从RGB转成HSV
+    cv::cvtColor(image,Tonimage,cv::COLOR_RGB2HSV);
+    //auto it=Tonimage.begin<cv::Vec3b>,end=Tonimage.end<cv::Vec3b>;
+    //遍历
+
+}

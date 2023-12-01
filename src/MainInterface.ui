@@ -136,6 +136,8 @@
     <addaction name="ac_hisequ"/>
     <addaction name="ac_sha"/>
     <addaction name="ac_smo"/>
+    <addaction name="ac_coltem"/>
+    <addaction name="ac_tone"/>
    </widget>
    <widget class="QMenu" name="menu_color">
     <property name="title">
@@ -150,8 +152,6 @@
     <property name="title">
      <string>其它(&amp;W)</string>
     </property>
-    <addaction name="ac_coltem"/>
-    <addaction name="ac_tone"/>
     <addaction name="ac_text"/>
     <addaction name="ac_clearfog"/>
     <addaction name="ac_watermark"/>

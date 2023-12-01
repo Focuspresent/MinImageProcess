@@ -29,11 +29,17 @@ protected:
     void moveEvent(QMoveEvent *event) override;
 public slots:
     void OpenImage();
+    void SaveImage();
     void CreateQCOM();
     void MakeSpin();
     void MakeExposure();
     void MakeBrightness();
     void MakeContrastRatio();
+    void MakeHistogramEqualization();
+    void MakeSharpen();
+    void MakeSmooth();
+    void MakeColorTemperature();
+    void MakeTone();
     void MatToShow();
     void DeleteButton();
 private:

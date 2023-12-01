@@ -56,11 +56,19 @@ public:
     //保存图片到某个路径
     void WriteCurMat(const char* filename){
         QString FileName=QString(filename);
-        cv::imwrite(FileName.toLocal8Bit().toStdString(),CurMat);
+        //转成BGR
+        cv::cvtColor(OriginMat,OriginMat,cv::COLOR_RGB2BGR);
+        cv::imwrite(FileName.toLocal8Bit().toStdString(),OriginMat);
+        //转成RGB
+        cv::cvtColor(OriginMat,OriginMat,cv::COLOR_BGR2RGB);
     }
 
     void WriteCurMat(const QString& filename){
-        cv::imwrite(filename.toLocal8Bit().toStdString(),CurMat);
+        //转成BGR
+        cv::cvtColor(OriginMat,OriginMat,cv::COLOR_RGB2BGR);
+        cv::imwrite(filename.toLocal8Bit().toStdString(),OriginMat);
+        //转成RGB
+        cv::cvtColor(OriginMat,OriginMat,cv::COLOR_BGR2RGB);
     }
 
     //看是否临近

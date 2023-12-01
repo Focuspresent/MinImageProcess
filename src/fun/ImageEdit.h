@@ -14,5 +14,10 @@ void Spin(double angle,bool flag=false);
 void Exposure(double alpha,int beta);
 void Brightness(int bright);
 void ContrastRatio(double contrast);
+void HistogramEqualization();
+void Sharpen(int level);
+void Smooth(int level);
+void ColorTemperature();
+void Tone(int tone);
 
 #endif //IMAGEEDIT_H

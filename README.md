@@ -21,17 +21,31 @@
 - vscode
 ### 主要框架
 ```
--MIP
- -README.md
- -CMakeLists.txt
- -build
- -.gitignore
- -apps
-  -CMakeLists.txt
-  -mip
- -src
-  -CMakeLists.txt
-
+|-- CMakeLists.txt
+|-- README.md
+|-- apps
+|   |-- CMakeLists.txt
+|   `-- mip.cpp
+|-- build
+|-- res
+`-- src
+    |-- CMakeLists.txt
+    |-- MainInterface.cpp
+    |-- MainInterface.h
+    |-- MainInterface.ui
+    |-- fun
+    |   |-- ColorAdjust.cpp
+    |   |-- ColorAdjust.h
+    |   |-- ImageEdit.cpp
+    |   |-- ImageEdit.h
+    |   |-- Others.cpp
+    |   |-- Others.h
+    |   `-- Tool.hpp
+    |-- interface
+    |   |-- QComposition.cpp
+    |   |-- QComposition.h
+    |   `-- QComposition.ui
+    `-- res.qrc
 ```
 ### 分类
 #### 图像编辑：Image editing
@@ -43,6 +57,8 @@
 - 直方图均衡化 Histogram equalization
 - 锐化 Sharpen
 - 平滑 Smooth
+- 色温 Color temperature
+- 色调 Tone
 #### 色彩调整功能：Color adjustment
 - 光感 Light sense
 - 曲线调整 Curve adjustment
@@ -50,8 +66,6 @@
 - 曲线调色 Curve tone
 - HSL（色相、饱和度、亮度）HSL (Hue, saturation, brightness)
 #### 其他功能：Others
-- 色温 Color temperature
-- 色调 Tone
 - 文字 Text
 - 去雾 Clear the fog
 - 水印 Watermark

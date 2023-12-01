@@ -17,11 +17,17 @@ MainInterface::MainInterface(QWidget* parent)
     //连接槽
     connect(ui->pb_open,SIGNAL(clicked()),this,SLOT(OpenImage()));
     connect(ui->open,SIGNAL(triggered()),this,SLOT(OpenImage()));
+    connect(ui->pb_save,SIGNAL(clicked()),this,SLOT(SaveImage()));
+    connect(ui->save,SIGNAL(triggered()),this,SLOT(SaveImage()));
     connect(ui->ac_crop,SIGNAL(triggered()),this,SLOT(CreateQCOM()));
     connect(ui->ac_spin,SIGNAL(triggered()),this,SLOT(MakeSpin()));
     connect(ui->ac_exp,SIGNAL(triggered()),this,SLOT(MakeExposure()));
     connect(ui->ac_bri,SIGNAL(triggered()),this,SLOT(MakeBrightness()));
     connect(ui->ac_conra,SIGNAL(triggered()),this,SLOT(MakeContrastRatio()));
+    connect(ui->ac_hisequ,SIGNAL(triggered()),this,SLOT(MakeHistogramEqualization()));
+    connect(ui->ac_sha,SIGNAL(triggered()),this,SLOT(MakeSharpen()));
+    connect(ui->ac_coltem,SIGNAL(triggered()),this,SLOT(MakeColorTemperature()));
+    connect(ui->ac_tone,SIGNAL(triggered()),this,SLOT(MakeTone()));
 }
 
 MainInterface::~MainInterface()
@@ -33,6 +39,9 @@ void MainInterface::OpenImage()
 {
     QString filename=QFileDialog::getOpenFileName(this,"选择一个图片","E:/图片/二次元","(All Imags(*.jpg *.png))");
     if(filename.isEmpty()){
+        #ifdef DEBUG
+            qDebug()<<"filename Empty";
+        #endif
         return ;
     }
     //先前的按钮
@@ -41,6 +50,25 @@ void MainInterface::OpenImage()
     TGI.ReadCurMat(filename);
     //展示
     MatToShow();
+}
+
+void MainInterface::SaveImage()
+{
+    QString filename=QFileDialog::getSaveFileName(this,"选择一个路径",QCoreApplication::applicationFilePath());
+    if(filename.isEmpty()){
+        #ifdef DEBUG
+            qDebug()<<"filename Empty";
+        #endif 
+        return ;
+    }
+    //确认
+    TGI.Comfirm();
+    //删除按钮
+    DeleteButton();
+    //展示
+    MatToShow();
+    //保存OriginMat;
+    TGI.WriteCurMat(filename);
 }
 
 void MainInterface::CreateQCOM()
@@ -157,6 +185,82 @@ void MainInterface::MakeContrastRatio()
     });
 }
 
+void MainInterface::MakeHistogramEqualization()
+{
+    if(TGMAT.empty()){
+        #ifdef DEBUG
+            qDebug()<<"CurMat Empty";
+        #endif 
+        return ;
+    }
+    //确定和取消
+    CreateComAndCan();
+
+    //直方图均衡化
+    HistogramEqualization();
+    //显示
+    MatToShow();
+}
+
+void MainInterface::MakeSharpen()
+{
+    if(TGMAT.empty()){
+        #ifdef DEBUG
+            qDebug()<<"CurMat Empty";
+        #endif 
+        return ;
+    }
+    //创建水平滑动条
+    CreateSliAndLin(0,100);
+
+    //确定和取消
+    CreateComAndCan();
+   
+    connect(slider,&QSlider::valueChanged,[this](int pos)->void{
+        Sharpen(pos);
+        MatToShow();
+    });
+}
+
+void MainInterface::MakeSmooth()
+{
+    if(TGMAT.empty()){
+        #ifdef DEBUG
+            qDebug()<<"CurMat Empty";
+        #endif 
+        return ;
+    }
+
+    //确定和取消
+    CreateComAndCan();
+}
+
+void MainInterface::MakeColorTemperature()
+{
+    if(TGMAT.empty()){
+        #ifdef DEBUG
+            qDebug()<<"CurMat Empty";
+        #endif 
+        return ;
+    }
+    
+}
+
+void MainInterface::MakeTone()
+{
+    if(TGMAT.empty()){
+        #ifdef DEBUG
+            qDebug()<<"CurMat Empty";
+        #endif 
+        return ;
+    }
+    //创建水平滑动条
+    CreateSliAndLin(-100,100);
+
+    //确定和取消
+    CreateComAndCan();
+}
+
 
 void MainInterface::MatToShow()
 {   
@@ -254,6 +358,7 @@ void MainInterface::CreateComAndCan()
 
     connect(bt_comfirm,&QPushButton::clicked,[this]()->void{
         TGI.Comfirm();
+        MatToShow();
         DeleteButton();
     });
     connect(bt_cancel,&QPushButton::clicked,[this]()->void{
@@ -285,13 +390,16 @@ void MainInterface::CreateSliAndLin(int MinValue,int MaxValue)
     lineedit->setText("0");
     lineedit->setStyleSheet("border: none;");
     lineedit->show();
-    lineedit->setGeometry(slider->geometry().x()+slider->geometry().width()/2-slider->geometry().height()/2,slider->geometry().y()-slider->geometry().height(),slider->geometry().height(),slider->geometry().height());
 
-    connect(slider,&QSlider::valueChanged,[this](int pos)->void{
+    QStyle* style = slider->style();
+    int sliderWidth = style->pixelMetric(QStyle::PM_SliderLength, nullptr, slider);
+    int mi=slider->minimum(),ma=slider->maximum();
+
+    int x=(int)slider->geometry().width()*((double)abs(0-mi)/abs(ma-mi));
+    lineedit->setGeometry(slider->geometry().x()-sliderWidth/2+x,slider->geometry().y()-slider->geometry().height(),slider->geometry().height(),slider->geometry().height());
+
+    connect(slider,&QSlider::valueChanged,[this,sliderWidth,mi,ma](int pos)->void{
         lineedit->setText(QString(std::to_string(pos).c_str()));
-        QStyle* style = slider->style();
-        int sliderWidth = style->pixelMetric(QStyle::PM_SliderLength, nullptr, slider);
-        int mi=slider->minimum(),ma=slider->maximum();
         int x=(int)slider->geometry().width()*((double)abs(pos-mi)/abs(ma-mi));
         lineedit->setGeometry(slider->geometry().x()-sliderWidth/2+x,slider->geometry().y()-slider->geometry().height(),slider->geometry().height(),slider->geometry().height());
     });
