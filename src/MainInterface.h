@@ -17,6 +17,7 @@
 #include <QLineEdit>
 #include "QComposition.h"
 #include "ImageEdit.h"
+#include "ColorAdjust.h"
 
 class MainInterface : public QMainWindow {
     Q_OBJECT
@@ -43,6 +44,7 @@ public slots:
     void MakeSmooth();
     void MakeColorTemperature();
     void MakeTone();
+    void MakeLightSense();
     void MatToShow();
     void DeleteButton();
 private:

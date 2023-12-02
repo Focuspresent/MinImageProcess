@@ -7,6 +7,6 @@
 
 #include "Tool.hpp"
 
-
+void LightSense(double alpha,int beta);
 
 #endif //COLORADJUST_H

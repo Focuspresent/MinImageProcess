@@ -29,6 +29,7 @@ MainInterface::MainInterface(QWidget* parent)
     connect(ui->ac_smo,SIGNAL(triggered()),this,SLOT(MakeSmooth()));
     connect(ui->ac_coltem,SIGNAL(triggered()),this,SLOT(MakeColorTemperature()));
     connect(ui->ac_tone,SIGNAL(triggered()),this,SLOT(MakeTone()));
+    connect(ui->ac_lis,SIGNAL(triggered()),this,SLOT(MakeLightSense()));
 }
 
 MainInterface::~MainInterface()
@@ -287,6 +288,33 @@ void MainInterface::MakeTone()
     });
 }
 
+void MainInterface::MakeLightSense()
+{
+    if(TGMAT.empty()){
+        #ifdef DEBUG
+            qDebug()<<"CurMat Empty";
+        #endif 
+        return ;
+    }
+    //创建水平滑动条
+    CreateSliAndLin(-100,100);
+
+    //确定和取消
+    CreateComAndCan();
+
+    //映射需要的值
+    //?-mi/ma-mi=pos-tmi/tma-tmi
+    double alphaMin=0.5,alphaMax=1.0;
+    int betaMin=-50,betaMax=50;
+    int tma=slider->maximum(),tmi=slider->minimum();
+
+    connect(slider,&QSlider::valueChanged,[this,alphaMin,alphaMax,betaMin,betaMax,tmi,tma](int pos)->void{
+        double alpha=(double)(alphaMax-alphaMin)*((double)(pos-tmi)/(tma-tmi))+alphaMin;
+        int beta=(int)(betaMax-betaMin)*((double)(pos-tmi)/(tma-tmi))+betaMin;
+        LightSense(alpha,beta);
+        MatToShow();
+    });
+}
 
 void MainInterface::MatToShow()
 {   
