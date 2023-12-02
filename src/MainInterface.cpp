@@ -8,6 +8,7 @@ MainInterface::MainInterface(QWidget* parent)
     ui->setupUi(this);
     //数据
     ui_qcom=nullptr;
+    ui_qhsl=nullptr;
     bt_comfirm=nullptr;
     bt_cancel=nullptr;
     slider=nullptr;
@@ -20,6 +21,7 @@ MainInterface::MainInterface(QWidget* parent)
     connect(ui->pb_save,SIGNAL(clicked()),this,SLOT(SaveImage()));
     connect(ui->save,SIGNAL(triggered()),this,SLOT(SaveImage()));
     connect(ui->ac_crop,SIGNAL(triggered()),this,SLOT(CreateQCOM()));
+    connect(ui->ac_hsl,SIGNAL(triggered()),this,SLOT(CreateQHSL()));
     connect(ui->ac_spin,SIGNAL(triggered()),this,SLOT(MakeSpin()));
     connect(ui->ac_exp,SIGNAL(triggered()),this,SLOT(MakeExposure()));
     connect(ui->ac_bri,SIGNAL(triggered()),this,SLOT(MakeBrightness()));
@@ -94,6 +96,33 @@ void MainInterface::CreateQCOM()
     connect(ui_qcom,SIGNAL(ChangeCurMat()),this,SLOT(MatToShow()));
     connect(bt_comfirm,&QPushButton::clicked,[this]()->void{
         ui_qcom->CropCurMat();
+        DeleteButton();
+    });
+    connect(bt_cancel,&QPushButton::clicked,[this]()->void{
+        DeleteButton();
+    });
+}
+
+void MainInterface::CreateQHSL()
+{
+    if(TGMAT.empty()){
+        #ifdef DEBUG
+            qDebug()<<"CurMat Empty";
+        #endif 
+        return ;
+    }
+    if(ui_qhsl!=nullptr){
+        delete ui_qhsl;
+        ui_qhsl=nullptr;
+    }
+    ui_qhsl=new QHSL();
+    ui_qhsl->show();
+
+    CreateComAndCan(false);
+
+    connect(ui_qhsl,SIGNAL(ChangeCurMat()),this,SLOT(MatToShow()));
+    connect(bt_comfirm,&QPushButton::clicked,[this]()->void{
+        TGI.Comfirm();
         DeleteButton();
     });
     connect(bt_cancel,&QPushButton::clicked,[this]()->void{
@@ -406,11 +435,13 @@ void MainInterface::DeleteButton()
     if(bt_comfirm) delete bt_comfirm;
     if(bt_cancel) delete bt_cancel;
     if(ui_qcom) delete ui_qcom;
+    if(ui_qhsl) delete ui_qhsl;
     if(slider) delete slider;
     if(lineedit) delete lineedit;
     lineedit=nullptr;
     slider=nullptr;
     ui_qcom=nullptr;
+    ui_qhsl=nullptr;
     bt_comfirm=bt_cancel=nullptr;
 }
 

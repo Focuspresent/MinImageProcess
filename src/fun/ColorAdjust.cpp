@@ -10,6 +10,11 @@ void LightSense(double alpha,int beta){
     TGI.setCurMat(LSimage);
 }
 
+//曲线调整
+void CurveAdjustment(){
+    
+}
+
 //饱和度
 void Saturation(double factor){
     //读取
@@ -27,4 +32,14 @@ void Saturation(double factor){
     cv::cvtColor(Satimage,Satimage,cv::COLOR_HSV2RGB);
     //写回
     TGI.setCurMat(Satimage);
+}
+
+//曲线调色
+void CurveTone(){
+
+}
+
+//HSL(色调、饱和度、亮度)
+void HSL(){
+
 }

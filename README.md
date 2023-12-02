@@ -44,7 +44,10 @@
     |-- interface
     |   |-- QComposition.cpp
     |   |-- QComposition.h
-    |   `-- QComposition.ui
+    |   |-- QComposition.ui
+    |   |-- QHSL.cpp
+    |   |-- QHSL.h
+    |   `-- QHSL.ui
     `-- res.qrc
 ```
 ### 分类
@@ -64,7 +67,7 @@
 - 曲线调整 Curve adjustment
 - 饱和度调整 Saturation adjustment
 - 曲线调色 Curve tone
-- HSL（色相、饱和度、亮度）HSL (Hue, saturation, brightness)
+- HSL（色调、饱和度、亮度）HSL (Hue, saturation, Lightness)
 #### 其他功能：Others
 - 文字 Text
 - 去雾 Clear the fog

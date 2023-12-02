@@ -16,6 +16,7 @@
 #include <QSizePolicy>
 #include <QLineEdit>
 #include "QComposition.h"
+#include "QHSL.h"
 #include "ImageEdit.h"
 #include "ColorAdjust.h"
 
@@ -35,6 +36,7 @@ public slots:
     void OpenImage();
     void SaveImage();
     void CreateQCOM();
+    void CreateQHSL();
     void MakeSpin();
     void MakeExposure();
     void MakeBrightness();
@@ -51,6 +53,7 @@ public slots:
 private:
     Ui_MainInterface* ui;
     QComposition* ui_qcom;
+    QHSL* ui_qhsl;
     QPushButton *bt_comfirm,*bt_cancel;
     QSlider* slider;
     QLineEdit* lineedit;
