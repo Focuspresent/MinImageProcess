@@ -26,6 +26,7 @@ MainInterface::MainInterface(QWidget* parent)
     connect(ui->ac_conra,SIGNAL(triggered()),this,SLOT(MakeContrastRatio()));
     connect(ui->ac_hisequ,SIGNAL(triggered()),this,SLOT(MakeHistogramEqualization()));
     connect(ui->ac_sha,SIGNAL(triggered()),this,SLOT(MakeSharpen()));
+    connect(ui->ac_smo,SIGNAL(triggered()),this,SLOT(MakeSmooth()));
     connect(ui->ac_coltem,SIGNAL(triggered()),this,SLOT(MakeColorTemperature()));
     connect(ui->ac_tone,SIGNAL(triggered()),this,SLOT(MakeTone()));
 }
@@ -86,12 +87,16 @@ void MainInterface::CreateQCOM()
     ui_qcom=new QComposition();
     ui_qcom->show();
 
-    CreateComAndCan();
+    CreateComAndCan(false);
 
     connect(ui_qcom,SIGNAL(ChangeCurMat()),this,SLOT(MatToShow()));
-    connect(bt_comfirm,SIGNAL(clicked()),ui_qcom,SLOT(CropCurMat()));
-    connect(bt_comfirm,SIGNAL(clicked()),this,SLOT(DeleteButton()));
-    connect(bt_cancel,&QPushButton::clicked,this,&MainInterface::DeleteButton);
+    connect(bt_comfirm,&QPushButton::clicked,[this]()->void{
+        ui_qcom->CropCurMat();
+        DeleteButton();
+    });
+    connect(bt_cancel,&QPushButton::clicked,[this]()->void{
+        DeleteButton();
+    });
 }
 
 void MainInterface::MakeSpin()
@@ -230,9 +235,16 @@ void MainInterface::MakeSmooth()
         #endif 
         return ;
     }
+    //创建水平滑动条
+    CreateSliAndLin(0,1000);
 
     //确定和取消
     CreateComAndCan();
+
+    connect(slider,&QSlider::valueChanged,[this](double value)->void{
+        Smooth(value);
+        MatToShow();
+    });
 }
 
 void MainInterface::MakeColorTemperature()
@@ -243,7 +255,16 @@ void MainInterface::MakeColorTemperature()
         #endif 
         return ;
     }
-    
+    //创建水平滑动条
+    CreateSliAndLin(-100,100);
+
+    //确定和取消
+    CreateComAndCan();
+
+    connect(slider,&QSlider::valueChanged,[this](int pos)->void{
+        ColorTemperature(pos);
+        MatToShow();
+    });
 }
 
 void MainInterface::MakeTone()
@@ -259,6 +280,11 @@ void MainInterface::MakeTone()
 
     //确定和取消
     CreateComAndCan();
+
+    connect(slider,&QSlider::valueChanged,[this](int pos)->void{
+        Tone(pos);
+        MatToShow();
+    });
 }
 
 
@@ -334,7 +360,7 @@ void MainInterface::DeleteButton()
     bt_comfirm=bt_cancel=nullptr;
 }
 
-void MainInterface::CreateComAndCan()
+void MainInterface::CreateComAndCan(bool flag)
 {
     if(bt_comfirm!=nullptr){
         delete bt_comfirm;
@@ -356,16 +382,18 @@ void MainInterface::CreateComAndCan()
     bt_cancel->setText("取消");
     bt_cancel->setGeometry(bt_comfirm->geometry().width(),ui->menubar->height(),60,30);
 
-    connect(bt_comfirm,&QPushButton::clicked,[this]()->void{
-        TGI.Comfirm();
-        MatToShow();
-        DeleteButton();
-    });
-    connect(bt_cancel,&QPushButton::clicked,[this]()->void{
-        TGI.Cancel();
-        MatToShow();
-        DeleteButton();
-    });
+    if(flag){
+        connect(bt_comfirm,&QPushButton::clicked,[this]()->void{
+            TGI.Comfirm();
+            MatToShow();
+            DeleteButton();
+        });
+        connect(bt_cancel,&QPushButton::clicked,[this]()->void{
+            TGI.Cancel();
+            MatToShow();
+            DeleteButton();
+        });
+    }
 }
 
 void MainInterface::CreateSliAndLin(int MinValue,int MaxValue)
@@ -402,5 +430,12 @@ void MainInterface::CreateSliAndLin(int MinValue,int MaxValue)
         lineedit->setText(QString(std::to_string(pos).c_str()));
         int x=(int)slider->geometry().width()*((double)abs(pos-mi)/abs(ma-mi));
         lineedit->setGeometry(slider->geometry().x()-sliderWidth/2+x,slider->geometry().y()-slider->geometry().height(),slider->geometry().height(),slider->geometry().height());
+    });
+    connect(lineedit,&QLineEdit::textChanged,[this,MinValue,MaxValue](const QString& text)->void{
+        int value=text.toInt();
+        if(value>MaxValue) value=MaxValue;
+        else if(value<MinValue) value=MinValue;
+        slider->setValue(value);
+        slider->triggerAction(QAbstractSlider::SliderMove);
     });
 }

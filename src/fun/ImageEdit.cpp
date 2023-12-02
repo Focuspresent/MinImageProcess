@@ -18,6 +18,9 @@ void Composition(cv::Rect& cropRect)
 #endif
     //写回
     TGI.setCurMat(cropImage);
+#ifdef DEBUG
+    cv::imshow("text crop",cropImage);
+#endif
     //确认
     TGI.Comfirm();
 }
@@ -119,14 +122,39 @@ void Sharpen(int level){
     TGI.setCurMat(Shaimage);
 }
 
-//平滑
-void Smooth(int level){
-    
+//平滑(高斯滤波)
+void Smooth(double level){
+    //读取
+    cv::Mat image=TGOMAT,Smoimage;
+    if(!level){
+        TGI.setCurMat(image);
+        return ;
+    }
+    //平滑(高斯滤波)
+    cv::GaussianBlur(image,Smoimage,cv::Size(3,3),level,level,cv::BORDER_DEFAULT);
+    //写回
+    TGI.setCurMat(Smoimage);
 }
 
-//色温
-void ColorTemperature(){
-
+//色温(RGB)
+void ColorTemperature(int temperature){
+    //计算增量
+    double red=temperature*1.0/100;
+    double blue=-temperature*1.0/100;
+    //输出图像
+    cv::Mat CTimage;
+    //分离
+    std::vector<cv::Mat> channels;
+    cv::split(TGOMAT,channels);
+    //增量计算
+    channels[0]+=red;
+    channels[2]+=blue;
+    //合并
+    cv::merge(channels,CTimage);
+    //保证数据范围
+    cv::normalize(CTimage,CTimage,0,255,cv::NORM_MINMAX);
+    //写回
+    TGI.setCurMat(CTimage);
 }
 
 //色调
@@ -135,7 +163,18 @@ void Tone(int tone){
     cv::Mat image=TGOMAT,Tonimage;
     //从RGB转成HSV
     cv::cvtColor(image,Tonimage,cv::COLOR_RGB2HSV);
-    //auto it=Tonimage.begin<cv::Vec3b>,end=Tonimage.end<cv::Vec3b>;
-    //遍历
-
+    //操作
+    for(int i=0;i<Tonimage.rows;i++){
+        for(int j=0;j<Tonimage.cols;j++){
+            int hue=Tonimage.at<cv::Vec3b>(i,j)[0];
+            int nhue=hue+100*tone/100.0;
+            if(nhue<0) nhue+=180;
+            if(nhue>179) nhue-=180;
+            Tonimage.at<cv::Vec3b>(i,j)[0]=nhue;
+        }
+    }
+    //从HSV转成RGB
+    cv::cvtColor(Tonimage,Tonimage,cv::COLOR_HSV2RGB);
+    //写回
+    TGI.setCurMat(Tonimage);
 }

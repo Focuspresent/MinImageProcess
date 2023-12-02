@@ -11,6 +11,9 @@
 #include <QDebug>
 #include <QSlider>
 #include <QStyle>
+#include <QPoint>
+#include <QWidget>
+#include <QSizePolicy>
 #include <QLineEdit>
 #include "QComposition.h"
 #include "ImageEdit.h"
@@ -21,7 +24,7 @@ class MainInterface : public QMainWindow {
 public:
     MainInterface(QWidget* parent = nullptr);
     ~MainInterface();
-    void CreateComAndCan();
+    void CreateComAndCan(bool flag=true);
     void CreateSliAndLin(int MinValue=0,int MaxValue=100);
 protected:
     void mousePressEvent(QMouseEvent* event) override;
