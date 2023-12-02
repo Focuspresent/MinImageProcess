@@ -30,6 +30,7 @@ MainInterface::MainInterface(QWidget* parent)
     connect(ui->ac_coltem,SIGNAL(triggered()),this,SLOT(MakeColorTemperature()));
     connect(ui->ac_tone,SIGNAL(triggered()),this,SLOT(MakeTone()));
     connect(ui->ac_lis,SIGNAL(triggered()),this,SLOT(MakeLightSense()));
+    connect(ui->ac_satadj,SIGNAL(triggered()),this,SLOT(MakeSaturation()));
 }
 
 MainInterface::~MainInterface()
@@ -312,6 +313,31 @@ void MainInterface::MakeLightSense()
         double alpha=(double)(alphaMax-alphaMin)*((double)(pos-tmi)/(tma-tmi))+alphaMin;
         int beta=(int)(betaMax-betaMin)*((double)(pos-tmi)/(tma-tmi))+betaMin;
         LightSense(alpha,beta);
+        MatToShow();
+    });
+}
+
+void MainInterface::MakeSaturation()
+{
+    if(TGMAT.empty()){
+        #ifdef DEBUG
+            qDebug()<<"CurMat Empty";
+        #endif 
+        return ;
+    }
+    //创建水平滑动条
+    CreateSliAndLin(-100,100);
+
+    //确定和取消
+    CreateComAndCan();
+
+    //映射
+    double saturationMin=0.0,saturationMax=2.0;
+    int tma=slider->maximum(),tmi=slider->minimum();
+
+    connect(slider,&QSlider::valueChanged,[this,saturationMax,saturationMin,tmi,tma](int pos)->void{
+        double factor=(double)(saturationMax-saturationMin)*((double)(pos-tmi)/(tma-tmi))+saturationMin;
+        Saturation(factor);
         MatToShow();
     });
 }

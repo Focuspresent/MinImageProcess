@@ -8,5 +8,6 @@
 #include "Tool.hpp"
 
 void LightSense(double alpha,int beta);
+void Saturation(double factor);
 
 #endif //COLORADJUST_H

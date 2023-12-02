@@ -45,6 +45,7 @@ public slots:
     void MakeColorTemperature();
     void MakeTone();
     void MakeLightSense();
+    void MakeSaturation();
     void MatToShow();
     void DeleteButton();
 private:
