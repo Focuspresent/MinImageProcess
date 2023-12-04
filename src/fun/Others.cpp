@@ -1,9 +1,7 @@
 #include "Others.h"
 
+//美颜
 void Beauty()
 {
-#ifdef FUN
-    
-#else
-#endif
+
 }

@@ -11,6 +11,7 @@ MainInterface::MainInterface(QWidget* parent)
     ui_qhsl=nullptr;
     bt_comfirm=nullptr;
     bt_cancel=nullptr;
+    bt_show=nullptr;
     slider=nullptr;
     lineedit=nullptr;
     TGI.setShowQRect(ui->label_show->geometry());
@@ -91,6 +92,7 @@ void MainInterface::CreateQCOM()
     ui_qcom=new QComposition();
     ui_qcom->show();
 
+    //确定和取消
     CreateComAndCan(false);
 
     connect(ui_qcom,SIGNAL(ChangeCurMat()),this,SLOT(MatToShow()));
@@ -118,6 +120,7 @@ void MainInterface::CreateQHSL()
     ui_qhsl=new QHSL();
     ui_qhsl->show();
 
+    //确定和取消
     CreateComAndCan(false);
 
     connect(ui_qhsl,SIGNAL(ChangeCurMat()),this,SLOT(MatToShow()));
@@ -138,8 +141,10 @@ void MainInterface::MakeSpin()
         #endif 
         return ;
     }
+    //创建水平滑动条
     CreateSliAndLin(-45,45);
 
+    //确定和取消
     CreateComAndCan();
 
     connect(slider,&QSlider::valueChanged,[this](int pos)->void{
@@ -434,6 +439,7 @@ void MainInterface::DeleteButton()
 {
     if(bt_comfirm) delete bt_comfirm;
     if(bt_cancel) delete bt_cancel;
+    if(bt_show) delete bt_show;
     if(ui_qcom) delete ui_qcom;
     if(ui_qhsl) delete ui_qhsl;
     if(slider) delete slider;
@@ -442,7 +448,7 @@ void MainInterface::DeleteButton()
     slider=nullptr;
     ui_qcom=nullptr;
     ui_qhsl=nullptr;
-    bt_comfirm=bt_cancel=nullptr;
+    bt_comfirm=bt_cancel=bt_show=nullptr;
 }
 
 void MainInterface::CreateComAndCan(bool flag)
@@ -479,6 +485,19 @@ void MainInterface::CreateComAndCan(bool flag)
             DeleteButton();
         });
     }
+}
+
+void MainInterface::CreateShow()
+{
+    if(bt_show!=nullptr){
+        delete bt_show;
+        bt_show=nullptr;
+    }
+    bt_show=new QPushButton(this);
+    bt_show->setWindowFlags(Qt::FramelessWindowHint);
+    bt_show->show();
+    bt_show->setText("显示");
+    bt_show->setGeometry(bt_comfirm->geometry().width()+bt_cancel->geometry().width(),ui->menubar->height(),60,30);
 }
 
 void MainInterface::CreateSliAndLin(int MinValue,int MaxValue)

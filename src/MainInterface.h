@@ -27,6 +27,7 @@ public:
     MainInterface(QWidget* parent = nullptr);
     ~MainInterface();
     void CreateComAndCan(bool flag=true);
+    void CreateShow();
     void CreateSliAndLin(int MinValue=0,int MaxValue=100);
 protected:
     void mousePressEvent(QMouseEvent* event) override;
@@ -54,7 +55,7 @@ private:
     Ui_MainInterface* ui;
     QComposition* ui_qcom;
     QHSL* ui_qhsl;
-    QPushButton *bt_comfirm,*bt_cancel;
+    QPushButton *bt_comfirm,*bt_cancel,*bt_show;
     QSlider* slider;
     QLineEdit* lineedit;
 };
