@@ -146,6 +146,7 @@
     <addaction name="ac_lis"/>
     <addaction name="ac_curadj"/>
     <addaction name="ac_satadj"/>
+    <addaction name="ac_curtone"/>
     <addaction name="ac_hsl"/>
    </widget>
    <widget class="QMenu" name="menu_others">
@@ -261,6 +262,11 @@
   <action name="ac_hisequ">
    <property name="text">
     <string>直方图均衡化</string>
+   </property>
+  </action>
+  <action name="ac_curtone">
+   <property name="text">
+    <string>曲线调色</string>
    </property>
   </action>
  </widget>

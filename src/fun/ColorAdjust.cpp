@@ -65,6 +65,33 @@ void CurveTone(bool R_flag,int R_origin,int R_target,bool G_flag,int G_origin,in
     TGI.setCurMat(CTimage);
 }
 
+//曲线调色(RGB)
+//单一通道
+//单一像素
+void CurveTone(int channel,int origin,int target){
+    //读取
+    cv::Mat image=TGOMAT;
+    //判定
+    if(channel>=image.channels()){
+        #ifdef DEBUG
+            std::cout<<"channel is more"<<std::endl;
+        #endif
+        return;
+    }
+    //复制
+    cv::Mat CTimage=image.clone();
+    for(int i=0;i<CTimage.rows;i++){
+        for(int j=0;j<CTimage.cols;j++){
+            //读取像素
+            cv::Vec3b& pixel=CTimage.at<cv::Vec3b>(i,j);
+            //修改像素
+            if(pixel[channel]==origin){
+                pixel[channel]=target;
+            }
+        }
+    }
+}
+
 //曲线调色(RGB调色)
 //多值修改
 //单一通道

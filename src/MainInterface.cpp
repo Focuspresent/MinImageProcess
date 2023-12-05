@@ -85,6 +85,7 @@ void MainInterface::CreateQCOM()
         #endif 
         return ;
     }
+    //创建界面
     if(ui_qcom!=nullptr){
         delete ui_qcom;
         ui_qcom=nullptr;
@@ -113,6 +114,7 @@ void MainInterface::CreateQHSL()
         #endif 
         return ;
     }
+    //创建界面
     if(ui_qhsl!=nullptr){
         delete ui_qhsl;
         ui_qhsl=nullptr;
