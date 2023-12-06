@@ -34,6 +34,7 @@ MainInterface::MainInterface(QWidget* parent)
     connect(ui->ac_tone,SIGNAL(triggered()),this,SLOT(MakeTone()));
     connect(ui->ac_lis,SIGNAL(triggered()),this,SLOT(MakeLightSense()));
     connect(ui->ac_satadj,SIGNAL(triggered()),this,SLOT(MakeSaturation()));
+    connect(ui->ac_beauty,SIGNAL(triggered()),this,SLOT(MakeBeauty()));
 }
 
 MainInterface::~MainInterface()
@@ -43,7 +44,7 @@ MainInterface::~MainInterface()
 
 void MainInterface::OpenImage()
 {
-    QString filename=QFileDialog::getOpenFileName(this,"选择一个图片","E:/图片/二次元","(All Imags(*.jpg *.png))");
+    QString filename=QFileDialog::getOpenFileName(this,"选择一个图片","./res","(All Imags(*.jpg *.png))");
     if(filename.isEmpty()){
         #ifdef DEBUG
             qDebug()<<"filename Empty";
@@ -374,6 +375,26 @@ void MainInterface::MakeSaturation()
     connect(slider,&QSlider::valueChanged,[this,saturationMax,saturationMin,tmi,tma](int pos)->void{
         double factor=(double)(saturationMax-saturationMin)*((double)(pos-tmi)/(tma-tmi))+saturationMin;
         Saturation(factor);
+        MatToShow();
+    });
+}
+
+void MainInterface::MakeBeauty()
+{
+    if(TGMAT.empty()){
+        #ifdef DEBUG
+            qDebug()<<"CurMat Empty";
+        #endif 
+        return ;
+    }
+    //创建水平滑动条
+    CreateSliAndLin(0,100);
+
+    //确定和取消
+    CreateComAndCan();
+
+    connect(slider,&QSlider::valueChanged,[this](int pos)->void{
+        Beauty(pos);
         MatToShow();
     });
 }

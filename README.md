@@ -66,7 +66,7 @@
 - 光感 Light sense
 - 曲线调整 Curve adjustment
 - 饱和度调整 Saturation adjustment
-- 曲线调色 Curve tone
+- 曲线调色 Curve tone(三次样条插值曲线)
 - HSL（色调、饱和度、亮度）HSL (Hue, saturation, Lightness)
 #### 其他功能：Others
 - 文字 Text

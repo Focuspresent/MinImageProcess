@@ -19,6 +19,7 @@
 #include "QHSL.h"
 #include "ImageEdit.h"
 #include "ColorAdjust.h"
+#include "Others.h"
 
 class MainInterface : public QMainWindow {
     Q_OBJECT
@@ -49,6 +50,7 @@ public slots:
     void MakeTone();
     void MakeLightSense();
     void MakeSaturation();
+    void MakeBeauty();
     void MatToShow();
     void DeleteButton();
 private:
