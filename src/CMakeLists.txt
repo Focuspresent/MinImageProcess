@@ -7,6 +7,9 @@ set(CMAKE_AUTOMOC ON)
 #生成qrc头文件
 set(CMAKE_AUTORCC ON)
 
+#添加测试
+add_subdirectory(test)
+
 #找Qt组件
 find_package(Qt5 COMPONENTS Widgets Core Gui REQUIRED)
 

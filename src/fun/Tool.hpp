@@ -229,6 +229,13 @@ public:
         return (g);
     }
 
+    //调整数据范围
+    double clip(double value,double mi,double ma){
+        if(value<mi) return mi;
+        if(value>ma) return ma;
+        return value;
+    }
+
     //操作数据
 
     //读取CurMat;
