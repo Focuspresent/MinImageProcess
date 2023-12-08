@@ -1,13 +1,12 @@
 #include "QCurve.h"
 
-QCurve::QCurve(QWidget* parent)
+QCurve::QCurve(QWidget* parent,cv::Scalar color)
     :QWidget(parent)
+    ,color(color)
 {
     setWindowFlags(Qt::FramelessWindowHint);
     resize(256,256);
 
-    color=cv::Scalar(0,0,0);
-    back_color=cv::Scalar(255,255,255);
     is_press=false;
     qpoints.push_back(QPoint(0,0));
     qpoints.push_back(QPoint(255,255));
@@ -57,11 +56,11 @@ std::vector<QPoint>::iterator QCurve::add(int x,int y)
                 #ifdef DEBUG
                     std::cout<<"insert"<<std::endl;
                 #endif
-                return qpoints.insert(iter,p);
+                return qpoints.insert(iter+1,p);
             }
         }
         #ifdef DEBUG
-                std::cout<<"append"<<std::endl;
+            std::cout<<"append"<<std::endl;
         #endif
         return qpoints.insert(qpoints.end(),p);
     }
@@ -138,7 +137,7 @@ int QCurve::calcCurve(double* output_y)
         if(i<start_qpoint->x()){
             output_y[i]=start_qpoint->y();
         }else if(i>=start_qpoint->x() && i<end_qpoint->x()){
-            output_y[i]=TGI.clip(z[i-start_qpoint->x()],0.0,255.0);
+            output_y[i]=TGI.clip(z[i-start_qpoint->x()],0,255);
         }else{
             output_y[i]=end_qpoint->y();
         }
@@ -149,48 +148,42 @@ int QCurve::calcCurve(double* output_y)
 void QCurve::paintEvent(QPaintEvent* event)
 {
     Q_UNUSED(event);
-    //绘制边框
     QPainter painter(this);
-    painter.drawLine(QPoint(0,0),QPoint(255,0));
-    painter.drawLine(QPoint(0,255),QPoint(255,255));
-    painter.drawLine(QPoint(0,0),QPoint(0,255));
-    painter.drawLine(QPoint(255,0),QPoint(255,255));
 
-    painter.drawLine(QPoint(63,0),QPoint(63,255));
-    painter.drawLine(QPoint(127,0),QPoint(127,255));
-    painter.drawLine(QPoint(191,0),QPoint(191,255));
-    painter.drawLine(QPoint(0,255-63),QPoint(255,255-63));
-    painter.drawLine(QPoint(0,255-127),QPoint(255,255-127));
-    painter.drawLine(QPoint(0,255-191),QPoint(255,255-191));
-
-    //绘制曲线
-    double z[256];
-    calcCurve(z);
-    for(int i=1;i<256;i++){
-        painter.drawLine(QPoint(i-1,255-z[i-1]),QPoint(i,255-z[i]));
-    }
+    #ifdef DEBUG
+        std::vector<QPoint>::iterator it;
+        for(it=qpoints.begin();it!=qpoints.end();it++){
+            std::cout<<"qpoint: "<<it->x()<<", "<<it->y()<<std::endl;
+        }
+    #endif
 
     //绘制控制点
     std::vector<QPoint>::iterator iter;
     for(iter=qpoints.begin();iter!=qpoints.end();iter++){
         painter.drawRect(QRect(QPoint(iter->x()-2,255-iter->y()+2),QPoint(iter->x()+2,255-iter->y()-2)));
     }
+
+    //绘制曲线
+    double z[256];
+    calcCurve(z);
+    QColor qcolor(color[2],color[1],color[0]);
+    painter.setPen(qcolor);
+    for(int i=1;i<256;i++){
+        painter.drawLine(QPoint(i-1,255-z[i-1]),QPoint(i,255-z[i]));
+    }
 }
 
-void QCurve::mousePressEvent(QMouseEvent* event)
+void QCurve::mouseDown(int x,int y)
 {
-    int x=event->pos().x(),y=event->pos().y();
-    y=255-y;
-    current=add(x,y);
-    is_press=true;
-    update();
+    y = 255 - y;
+	current = add( x , y );
+	is_press = true;
 }
 
-void QCurve::mouseMoveEvent(QMouseEvent* event)
+bool QCurve::mouseMove(int x,int y)
 {
-	int x=event->pos().x(),y=event->pos().y();
-    y=255-y;
-	if (is_press) {
+    y = 255 - y;
+	if ( is_press ) {
 		if (current != qpoints.end()) {
 			int prev_x = 0;
 			int next_x = 255;
@@ -199,21 +192,19 @@ void QCurve::mouseMoveEvent(QMouseEvent* event)
 				int prev_y = (current - 1)->y();
 				prev_x = (current - 1)->x();
 
-				//匹配先前的点
-				if ( qpoints.size() > 2 && std::abs(x - prev_x) <=NVal && std::abs(y - prev_y) <= NVal ) {
+				//match the previous point
+				if ( qpoints.size() > 2 && std::abs(x - prev_x) <= NVal && std::abs(y - prev_y) <= NVal ) {
 					current--;
 					current = qpoints.erase(current);
                     #ifdef DEBUG
-					    std::cout<<"erase previous"<<std::endl;
+                        std::cout<<"erase previous"<<std::endl;
                     #endif
-                    update();
-					return ;
+					return true;
 				}
 
-				//如果x 小于 先前的x
+				//if x less than x of previou point
 				if ( x <= prev_x) {
-                    update();
-					return ;
+					return true;
 				}
 			}
 
@@ -221,39 +212,49 @@ void QCurve::mouseMoveEvent(QMouseEvent* event)
 				int next_y = (current + 1)->y();
 				next_x = (current + 1)->x();
 
-				// 匹配下一个点
+				//match the next point
 				if ( qpoints.size() > 2 && std::abs(x - next_x) <= NVal && std::abs(y - next_y) <= NVal ) {
 					current = qpoints.erase(current);
                     #ifdef DEBUG
-					    std::cout<<"erase next"<<std::endl;
+                        std::cout<<"erase next"<<std::endl;
                     #endif
-                    update();
-					return ;
+					return true;
 				}
 
-				//如果x大于下一个的x
+				//if x great than x of next point
 				if ( x >= next_x) {
-                    update();
-					return ;
+					return true;
 				}
 			}
 
             current->setX(TGI.clip(x,0,255));
             current->setY(TGI.clip(y,0,255));
 
-            update();
-			return ;
+			return true;
 		}
 	}
+	return false;
+}
+
+void QCurve::mouseUp(int x, int y)
+{
+	y = 255 - y;
+	is_press = false;
+}
+
+void QCurve::mousePressEvent(QMouseEvent* event)
+{
+    mouseDown(event->x(),event->y());
     update();
-	return ;
+}
+
+void QCurve::mouseMoveEvent(QMouseEvent* event){
+    if(mouseMove(event->x(),event->y())) update();
 }
 
 void QCurve::mouseReleaseEvent(QMouseEvent* event)
 {
-    int x=event->pos().x(),y=event->pos().y();
-    y=255-y;
-	is_press = false;
+    mouseUp(event->x(),event->y());
     update();
 }
 
