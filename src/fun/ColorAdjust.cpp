@@ -134,6 +134,26 @@ void CurveTone(int channel,std::vector<int> origin,std::vector<int> target){
     TGI.setCurMat(CTimage);
 }
 
+//rgb [0,1,2]
+void CurveTone(uchar table[][256],int channels){
+    //读取
+    cv::Mat image=TGOMAT;
+    //复制
+    cv::Mat CTimage=image.clone();
+    //修改像素
+    for(int i=0;i<CTimage.rows;i++){
+        for(int j=0;j<CTimage.cols;j++){
+            cv::Vec3b& ctpixel=CTimage.at<cv::Vec3b>(i,j);
+            cv::Vec3b& pixel=image.at<cv::Vec3b>(i,j);
+            for(int i=0;i<channels;i++){
+                ctpixel[i]=table[i][pixel[i]];
+            }
+        }
+    }
+    //写回
+    TGI.setCurMat(CTimage);
+}
+
 //HSL(色调、饱和度、亮度)
 void HSL(){
 

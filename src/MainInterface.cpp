@@ -9,6 +9,7 @@ MainInterface::MainInterface(QWidget* parent)
     //数据
     ui_qcom=nullptr;
     ui_qhsl=nullptr;
+    ui_qct=nullptr;
     bt_comfirm=nullptr;
     bt_cancel=nullptr;
     bt_show=nullptr;
@@ -23,6 +24,7 @@ MainInterface::MainInterface(QWidget* parent)
     connect(ui->save,SIGNAL(triggered()),this,SLOT(SaveImage()));
     connect(ui->ac_crop,SIGNAL(triggered()),this,SLOT(CreateQCOM()));
     connect(ui->ac_hsl,SIGNAL(triggered()),this,SLOT(CreateQHSL()));
+    connect(ui->ac_curtone,SIGNAL(triggered()),this,SLOT(CreateQCT()));
     connect(ui->ac_spin,SIGNAL(triggered()),this,SLOT(MakeSpin()));
     connect(ui->ac_exp,SIGNAL(triggered()),this,SLOT(MakeExposure()));
     connect(ui->ac_bri,SIGNAL(triggered()),this,SLOT(MakeBrightness()));
@@ -133,6 +135,38 @@ void MainInterface::CreateQHSL()
     });
     connect(bt_cancel,&QPushButton::clicked,[this]()->void{
         DeleteButton();
+    });
+}
+
+void MainInterface::CreateQCT()
+{
+    if(TGMAT.empty()){
+        #ifdef DEBUG
+            qDebug()<<"CurMat Empty";
+        #endif 
+        return ;
+    }
+    //创建界面
+    if(ui_qct!=nullptr){
+        delete ui_qct;
+        ui_qct=nullptr;
+    }
+    ui_qct=new QCurveTone();
+    ui_qct->show();
+
+    //确定和取消
+    CreateComAndCan();
+
+    //显示
+    CreateShow();
+
+    connect(ui_qct,SIGNAL(ChangeCurMat()),this,SLOT(MatToShow()));
+    connect(bt_show,&QPushButton::clicked,[this]()->void{
+        if(ui_qct->isVisible()){
+            ui_qct->hide();
+        }else{
+            ui_qct->show();
+        }
     });
 }
 
@@ -465,12 +499,14 @@ void MainInterface::DeleteButton()
     if(bt_show) delete bt_show;
     if(ui_qcom) delete ui_qcom;
     if(ui_qhsl) delete ui_qhsl;
+    if(ui_qct) delete ui_qct;
     if(slider) delete slider;
     if(lineedit) delete lineedit;
     lineedit=nullptr;
     slider=nullptr;
     ui_qcom=nullptr;
     ui_qhsl=nullptr;
+    ui_qct=nullptr;
     bt_comfirm=bt_cancel=bt_show=nullptr;
 }
 
