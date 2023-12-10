@@ -156,11 +156,26 @@ void QCurve::paintEvent(QPaintEvent* event)
             std::cout<<"qpoint: "<<it->x()<<", "<<it->y()<<std::endl;
         }
     #endif
+    //绘制边框
+    painter.drawLine(QPoint(0,0),QPoint(255,0));
+    painter.drawLine(QPoint(0,255),QPoint(255,255));
+    painter.drawLine(QPoint(0,0),QPoint(0,255));
+    painter.drawLine(QPoint(255,0),QPoint(255,255));
+
+    painter.drawLine(QPoint(63,0),QPoint(63,255));
+    painter.drawLine(QPoint(127,0),QPoint(127,255));
+    painter.drawLine(QPoint(191,0),QPoint(191,255));
+    painter.drawLine(QPoint(0,255-63),QPoint(255,255-63));
+    painter.drawLine(QPoint(0,255-127),QPoint(255,255-127));
+    painter.drawLine(QPoint(0,255-191),QPoint(255,255-191));
 
     //绘制控制点
     std::vector<QPoint>::iterator iter;
     for(iter=qpoints.begin();iter!=qpoints.end();iter++){
         painter.drawRect(QRect(QPoint(iter->x()-2,255-iter->y()+2),QPoint(iter->x()+2,255-iter->y()-2)));
+        if(current==iter){
+            painter.drawRect(QRect(QPoint(iter->x()-1,255-iter->y()+1),QPoint(iter->x()+1,255-iter->y()-1)));
+        }
     }
 
     //绘制曲线

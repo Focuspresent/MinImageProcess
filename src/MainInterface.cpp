@@ -25,6 +25,7 @@ MainInterface::MainInterface(QWidget* parent)
     connect(ui->ac_crop,SIGNAL(triggered()),this,SLOT(CreateQCOM()));
     connect(ui->ac_hsl,SIGNAL(triggered()),this,SLOT(CreateQHSL()));
     connect(ui->ac_curtone,SIGNAL(triggered()),this,SLOT(CreateQCT()));
+    connect(ui->ac_curadj,SIGNAL(triggered()),this,SLOT(CreateQCT()));
     connect(ui->ac_spin,SIGNAL(triggered()),this,SLOT(MakeSpin()));
     connect(ui->ac_exp,SIGNAL(triggered()),this,SLOT(MakeExposure()));
     connect(ui->ac_bri,SIGNAL(triggered()),this,SLOT(MakeBrightness()));

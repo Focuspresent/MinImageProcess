@@ -24,6 +24,9 @@ private:
     QCurve *rgb,*red,*green,*blue;
     QPushButton *bt_rgb,*bt_red,*bt_green,*bt_blue;
     QCurve *current;
+
+    QPoint pos;
+    bool is_press;
 };
 
 #endif //QCURVETONE_H

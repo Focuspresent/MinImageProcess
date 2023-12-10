@@ -6,6 +6,7 @@ QCurveTone::QCurveTone(QWidget* parent)
     setWindowFlags(Qt::FramelessWindowHint);
     resize(400,300);
     setMouseTracking(true);
+    is_press=false;
 
     rgb=new QCurve(this,cv::Scalar(0,0,0));
     rgb->hide();
@@ -114,6 +115,9 @@ void QCurveTone::mousePressEvent(QMouseEvent* event)
     if(x>=0&&x<=255&&y>=0&&y<=255){
         current->mouseDown(x,y);    
         update();
+    }else if(event->buttons()==Qt::LeftButton){
+        is_press=true;
+        pos=event->pos();
     }
 }
 
@@ -125,6 +129,9 @@ void QCurveTone::mouseMoveEvent(QMouseEvent* event)
             update();
             ModfiyCurMat();
         }
+    }else if(event->buttons()==Qt::LeftButton&&is_press){
+        QPoint newPos=event->globalPos()-pos;
+        move(newPos);
     }
 }
 
@@ -134,5 +141,7 @@ void QCurveTone::mouseReleaseEvent(QMouseEvent* event)
     if(x>=0&&x<=255&&y>=0&&y<=255){
         current->mouseUp(x,y);
         update();
+    }else if(event->buttons()==Qt::LeftButton){
+        is_press=false;
     }
 }
