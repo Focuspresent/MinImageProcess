@@ -5,6 +5,7 @@ QCurveTone::QCurveTone(QWidget* parent)
 {   
     setWindowFlags(Qt::FramelessWindowHint);
     resize(400,300);
+    setMouseTracking(true);
 
     rgb=new QCurve(this,cv::Scalar(0,0,0));
     rgb->hide();
@@ -70,5 +71,68 @@ void QCurveTone::setCurrent(QCurve* qcurve)
     }
     if(current!=blue){
         blue->hide();
+    }
+}
+
+void QCurveTone::ModfiyCurMat()
+{
+    uchar table[3][256];
+
+    double z[256];
+    //算红色通道
+    red->calcCurve(z);
+    for(int i=0;i<256;i++){
+        table[0][i]=z[i];
+    }
+    //算绿色通道
+    green->calcCurve(z);
+    for(int i=0;i<256;i++){
+        table[1][i]=z[i];
+    }
+    //算蓝色通道
+    blue->calcCurve(z);
+    for(int i=0;i<256;i++){
+        table[2][i]=z[i];
+    }
+    //算综合通道
+    rgb->calcCurve(z);
+    for(int i=0;i<256;i++){
+        for(int c=0;c<3;c++){
+            uchar value = table[c][i];
+			table[c][i] = z[value];
+        }
+    }
+    //调整
+    CurveTone(table,3);
+    //发射信号
+    emit ChangeCurMat();
+}
+
+void QCurveTone::mousePressEvent(QMouseEvent* event)
+{
+    int x=event->pos().x()-100,y=event->pos().y()-22;
+    if(x>=0&&x<=255&&y>=0&&y<=255){
+        current->mouseDown(x,y);    
+        update();
+    }
+}
+
+void QCurveTone::mouseMoveEvent(QMouseEvent* event)
+{   
+    int x=event->pos().x()-100,y=event->pos().y()-22;
+    if(x>=0&&x<=255&&y>=0&&y<=255){
+        if(current->mouseMove(x,y)){
+            update();
+            ModfiyCurMat();
+        }
+    }
+}
+
+void QCurveTone::mouseReleaseEvent(QMouseEvent* event)
+{
+    int x=event->pos().x()-100,y=event->pos().y()-22;
+    if(x>=0&&x<=255&&y>=0&&y<=255){
+        current->mouseUp(x,y);
+        update();
     }
 }

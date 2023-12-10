@@ -242,21 +242,23 @@ void QCurve::mouseUp(int x, int y)
 	is_press = false;
 }
 
-void QCurve::mousePressEvent(QMouseEvent* event)
+/* void QCurve::mousePressEvent(QMouseEvent* event)
 {
     mouseDown(event->x(),event->y());
     update();
 }
 
 void QCurve::mouseMoveEvent(QMouseEvent* event){
-    if(mouseMove(event->x(),event->y())) update();
+    if(mouseMove(event->x(),event->y())){
+        update();
+    }
 }
 
 void QCurve::mouseReleaseEvent(QMouseEvent* event)
 {
     mouseUp(event->x(),event->y());
     update();
-}
+} */
 
 void QCurve::clearQPoints()
 {

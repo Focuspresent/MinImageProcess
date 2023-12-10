@@ -135,7 +135,7 @@ void CurveTone(int channel,std::vector<int> origin,std::vector<int> target){
 }
 
 //rgb [0,1,2]
-void CurveTone(uchar table[][256],int channels){
+void CurveTone(uchar table[][256],int channels=3){
     //读取
     cv::Mat image=TGOMAT;
     //复制

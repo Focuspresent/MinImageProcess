@@ -32,9 +32,9 @@ public:
     void mouseUp(int x,int y);
 protected:
     void paintEvent(QPaintEvent *event) override;
-    void mousePressEvent(QMouseEvent* event) override;
+    /* void mousePressEvent(QMouseEvent* event) override;
     void mouseMoveEvent(QMouseEvent* event) override;
-    void mouseReleaseEvent(QMouseEvent* event) override;
+    void mouseReleaseEvent(QMouseEvent* event) override; */
 private:
     cv::Scalar color;
     std::vector<QPoint> qpoints;

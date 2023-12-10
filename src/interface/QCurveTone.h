@@ -2,6 +2,7 @@
 #define QCURVETONE_H
 
 #include "QCurve.h"
+#include "ColorAdjust.h"
 #include <QPushButton>
 
 class QCurveTone:public QWidget{
@@ -11,12 +12,13 @@ public:
     QCurveTone(QWidget* parent=nullptr);
     ~QCurveTone();
     void setCurrent(QCurve* qcurve);
+    void ModfiyCurMat();
 signals:
     void ChangeCurMat();
 protected:
-    /* void mousePressEvent(QMouseEvent* event) override;
+    void mousePressEvent(QMouseEvent* event) override;
     void mouseMoveEvent(QMouseEvent* event) override;
-    void mouseReleaseEvent(QMouseEvent* event) override; */
+    void mouseReleaseEvent(QMouseEvent* event) override;
 public slots:
 private:
     QCurve *rgb,*red,*green,*blue;
