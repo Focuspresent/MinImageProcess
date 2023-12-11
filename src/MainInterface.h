@@ -15,9 +15,11 @@
 #include <QWidget>
 #include <QSizePolicy>
 #include <QLineEdit>
+#include <QRect>
 #include "QComposition.h"
 #include "QHSL.h"
 #include "QCurveTone.h"
+#include "QText.h"
 #include "ImageEdit.h"
 #include "ColorAdjust.h"
 #include "Others.h"
@@ -41,6 +43,7 @@ public slots:
     void CreateQCOM();
     void CreateQHSL();
     void CreateQCT();
+    void CreateQT();
     void MakeSpin();
     void MakeExposure();
     void MakeBrightness();
@@ -60,6 +63,7 @@ private:
     QComposition* ui_qcom;
     QHSL* ui_qhsl;
     QCurveTone* ui_qct;
+    QText* ui_qtext;
     QPushButton *bt_comfirm,*bt_cancel,*bt_show;
     QSlider* slider;
     QLineEdit* lineedit;

@@ -51,7 +51,9 @@
     |   |-- QCurveTone.h
     |   |-- QHSL.cpp
     |   |-- QHSL.h
-    |   `-- QHSL.ui
+    |   |-- QHSL.ui
+    |   |-- QText.cpp
+    |   `-- QText.h
     |-- res.qrc
     `-- test
         |-- CMakeLists.txt

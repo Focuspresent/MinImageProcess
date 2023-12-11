@@ -10,6 +10,7 @@ MainInterface::MainInterface(QWidget* parent)
     ui_qcom=nullptr;
     ui_qhsl=nullptr;
     ui_qct=nullptr;
+    ui_qtext=nullptr;
     bt_comfirm=nullptr;
     bt_cancel=nullptr;
     bt_show=nullptr;
@@ -26,6 +27,7 @@ MainInterface::MainInterface(QWidget* parent)
     connect(ui->ac_hsl,SIGNAL(triggered()),this,SLOT(CreateQHSL()));
     connect(ui->ac_curtone,SIGNAL(triggered()),this,SLOT(CreateQCT()));
     connect(ui->ac_curadj,SIGNAL(triggered()),this,SLOT(CreateQCT()));
+    connect(ui->ac_text,SIGNAL(triggered()),this,SLOT(CreateQT()));
     connect(ui->ac_spin,SIGNAL(triggered()),this,SLOT(MakeSpin()));
     connect(ui->ac_exp,SIGNAL(triggered()),this,SLOT(MakeExposure()));
     connect(ui->ac_bri,SIGNAL(triggered()),this,SLOT(MakeBrightness()));
@@ -178,6 +180,41 @@ void MainInterface::CreateQCT()
         }else{
             ui_qct->show();
         }
+    });
+}
+
+void MainInterface::CreateQT()
+{
+    if(TGMAT.empty()){
+        #ifdef DEBUG
+            qDebug()<<"CurMat Empty";
+        #endif 
+        return ;
+    }
+    //创建文本框
+    if(ui_qtext!=nullptr){
+        delete ui_qtext;
+        ui_qtext=nullptr;
+    }   
+    ui_qtext=new QText();
+    ui_qtext->show();
+
+    //确定和取消
+    CreateComAndCan(false);
+
+    connect(bt_comfirm,&QPushButton::clicked,[this]()->void{
+        QRect geo = ui_qtext->geometry();
+        int x=geo.topLeft().x();
+        int y=geo.topLeft().y();
+        Text(ui_qtext->text().toLocal8Bit(),x-TGI.X(),y-TGI.Y()+geo.height(),cv::FONT_HERSHEY_SIMPLEX,1.0,cv::Scalar(255,255,255));
+        MatToShow();
+        TGI.Comfirm();
+        DeleteButton();
+    });
+    connect(bt_cancel,&QPushButton::clicked,[this]()->void{
+        TGI.Cancel();
+        MatToShow();
+        DeleteButton();
     });
 }
 
@@ -511,6 +548,7 @@ void MainInterface::DeleteButton()
     if(ui_qcom) delete ui_qcom;
     if(ui_qhsl) delete ui_qhsl;
     if(ui_qct) delete ui_qct;
+    if(ui_qtext) delete ui_qtext;
     if(slider) delete slider;
     if(lineedit) delete lineedit;
     lineedit=nullptr;
@@ -518,6 +556,7 @@ void MainInterface::DeleteButton()
     ui_qcom=nullptr;
     ui_qhsl=nullptr;
     ui_qct=nullptr;
+    ui_qtext=nullptr;
     bt_comfirm=bt_cancel=bt_show=nullptr;
 }
 

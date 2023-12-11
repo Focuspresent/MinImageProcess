@@ -8,5 +8,6 @@
 #include "Tool.hpp"
 
 void Beauty(int value);
+void Text(const char* text,int x,int y,int cvenum,double fontScale,cv::Scalar scalar, int thickness=1,int linetype=8);
 
 #endif //OTHERS_H

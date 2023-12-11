@@ -38,3 +38,25 @@ void Beauty(int value)
     //写回
     TGI.setCurMat(Beimage);
 }
+
+/**
+ * 文字(水平)
+ * @param text 写入的字符串内容
+ * @param x 文字左下角的x轴坐标
+ * @param y 文字左下角的y轴坐标
+ * @param cvenum 字体类型
+ * @param fontScale 字体大小的缩放因子
+ * @param scalar 字体的颜色
+ * @param thickness 文本的线条粗细(1)
+ * @param linetype 文本的线条类型(8)
+*/
+void Text(const char* text,int x,int y,int cvenum,double fontScale,cv::Scalar scalar,int thickness,int linetype){
+    //读取
+    cv::Mat image=TGOMAT;
+    //复制
+    cv::Mat Timage=image.clone();
+    //写字
+    cv::putText(Timage,text,cv::Point(x,y),cvenum,fontScale,scalar,thickness,linetype);
+    //写回
+    TGI.setCurMat(Timage);
+}
