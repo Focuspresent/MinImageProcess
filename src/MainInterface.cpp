@@ -129,7 +129,17 @@ void MainInterface::CreateQHSL()
     //确定和取消
     CreateComAndCan(false);
 
+    //显示
+    CreateShow();
+
     connect(ui_qhsl,SIGNAL(ChangeCurMat()),this,SLOT(MatToShow()));
+    connect(bt_show,&QPushButton::clicked,[this]()->void{
+        if(ui_qhsl->isVisible()){
+            ui_qhsl->hide();
+        }else{
+            ui_qhsl->show();
+        }
+    });
     connect(bt_comfirm,&QPushButton::clicked,[this]()->void{
         TGI.Comfirm();
         DeleteButton();

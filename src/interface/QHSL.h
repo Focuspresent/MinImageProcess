@@ -5,6 +5,8 @@
 #include <QWidget>
 #include <QMouseEvent>
 #include <QPoint>
+#include "ImageEdit.h"
+#include "ColorAdjust.h"
 
 class QHSL:public QWidget{
     Q_OBJECT

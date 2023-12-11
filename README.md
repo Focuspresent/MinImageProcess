@@ -45,10 +45,17 @@
     |   |-- QComposition.cpp
     |   |-- QComposition.h
     |   |-- QComposition.ui
+    |   |-- QCurve.cpp
+    |   |-- QCurve.h
+    |   |-- QCurveTone.cpp
+    |   |-- QCurveTone.h
     |   |-- QHSL.cpp
     |   |-- QHSL.h
     |   `-- QHSL.ui
-    `-- res.qrc
+    |-- res.qrc
+    `-- test
+        |-- CMakeLists.txt
+        `-- QCurve_test.cpp
 ```
 ### 分类
 #### 图像编辑：Image editing
