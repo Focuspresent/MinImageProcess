@@ -5,14 +5,14 @@ void Composition(cv::Rect& cropRect)
 {   
     //读取
     cv::Mat image=TGOMAT;
-#ifdef FUN
+#ifndef FUN
     //裁剪
     cv::Mat cropImage=image(cropRect);
 #else
-    cv::Mat cropImage(cropRect.height,cropRect.width,CV_8UC3);
-    for(int i=cropRect.x;i<cropRect.x+cropRect.width;i++){
-        for(int j=cropRect.y;j<cropRect.y+cropRect.height;j++){
-            cropImage.at<cv::Vec3b>(j-cropRect.y,i-cropRect.x)=image.at<cv::Vec3b>(j,i);
+    cv::Mat cropImage(cropRect.height, cropRect.width, CV_8UC3);
+    for (int i = cropRect.x; i < cropRect.x + cropRect.width; i++) {
+        for (int j = cropRect.y; j < cropRect.y + cropRect.height; j++) {
+            cropImage.at<cv::Vec3b>(j - cropRect.y, i - cropRect.x) = image.at<cv::Vec3b>(j, i);
         }
     }
 #endif
