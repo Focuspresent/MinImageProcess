@@ -147,6 +147,8 @@ void MainInterface::CreateQHSL()
         DeleteButton();
     });
     connect(bt_cancel,&QPushButton::clicked,[this]()->void{
+        TGI.Cancel();
+        MatToShow();
         DeleteButton();
     });
 }
