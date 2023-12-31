@@ -1,17 +1,18 @@
 set(CMAKE_PREFIX_PATH "D:/Qt/Qt5.14.2/5.14.2/mingw73_64")
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
-#生成ui头文件
-set(CMAKE_AUTOUIC ON)
-#元编程
-set(CMAKE_AUTOMOC ON)
-#生成qrc头文件
-set(CMAKE_AUTORCC ON)
 
 #添加测试
 add_subdirectory(test)
 
 #找Qt组件
 find_package(Qt5 COMPONENTS Widgets Core Gui REQUIRED)
+#生成ui头文件
+set(CMAKE_AUTOUIC ON)
+#元编程
+set(CMAKE_AUTOMOC ON)
+#生成qrc头文件
+#set(CMAKE_AUTORCC ON)
+qt5_add_resources(RESOURCES res.qrc)
 
 #找OpenCv库
 set(OpenCV_DIR "d:/OpenCv/opencv/opencv_build/install/x64/mingw/lib")
@@ -25,6 +26,7 @@ aux_source_directory(./interface SRCS)
 #生成库
 add_library(${LIB_NAME}
     ${SRCS}
+    ${RESOURCES}
 )
 #头文件
 set(LIB_INCLUDE "${CMAKE_CURRENT_BINARY_DIR}/${LIB_NAME}_autogen/include")

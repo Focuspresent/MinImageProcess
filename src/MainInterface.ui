@@ -25,6 +25,11 @@
   <property name="windowTitle">
    <string>MainInterface</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">#MainInterface{
+border-image: url(src/res/darkgray.png);
+}</string>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QHBoxLayout" name="horizontalLayout">
     <item>
@@ -35,46 +40,69 @@
         <height>16777215</height>
        </size>
       </property>
+      <property name="styleSheet">
+       <string notr="true">#widget{
+border-image: url(src/res/darkgray.png);
+}</string>
+      </property>
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
         <widget class="QPushButton" name="pb_open">
+         <property name="styleSheet">
+          <string notr="true">image:url(src/res/open.png);</string>
+         </property>
          <property name="text">
-          <string>打开</string>
+          <string/>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QPushButton" name="pb_save">
+         <property name="styleSheet">
+          <string notr="true">image: url(src/res/save.png);</string>
+         </property>
          <property name="text">
-          <string>保存</string>
+          <string/>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QPushButton" name="pb_edit">
+         <property name="styleSheet">
+          <string notr="true">image: url(src/res/edit.png);</string>
+         </property>
          <property name="text">
-          <string>编辑</string>
+          <string/>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QPushButton" name="pb_color">
+         <property name="styleSheet">
+          <string notr="true">image: url(src/res/color.png);</string>
+         </property>
          <property name="text">
-          <string>色彩</string>
+          <string/>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QPushButton" name="pb_others">
+         <property name="styleSheet">
+          <string notr="true">image: url(src/res/other.png);</string>
+         </property>
          <property name="text">
-          <string>其他</string>
+          <string/>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QPushButton" name="pb_beauty">
+         <property name="styleSheet">
+          <string notr="true">image: url(src/res/beauty.png);</string>
+         </property>
          <property name="text">
-          <string>美颜</string>
+          <string/>
          </property>
         </widget>
        </item>
@@ -83,6 +111,11 @@
     </item>
     <item>
      <widget class="QWidget" name="widget_2" native="true">
+      <property name="styleSheet">
+       <string notr="true">#widget_2{
+border-image: url(src/res/darkgray.png);
+}</string>
+      </property>
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
         <widget class="QLabel" name="label_show">
@@ -91,6 +124,9 @@
            <width>400</width>
            <height>400</height>
           </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(223, 223, 223);</string>
          </property>
          <property name="frameShape">
           <enum>QFrame::Panel</enum>
@@ -270,6 +306,8 @@
    </property>
   </action>
  </widget>
- <resources/>
+ <resources>
+  <include location="res.qrc"/>
+ </resources>
  <connections/>
 </ui>
