@@ -1,8 +1,11 @@
 #include "Others.h"
 
-//美颜
-//haar级联分类器
-//双边滤波
+/**
+ * 美颜
+ * haar级联分类器
+ * 双边滤波
+ * @param value 双边滤波的程度 
+*/
 void Beauty(int value)
 {
     //创建人脸检测器
@@ -55,6 +58,10 @@ void Text(const char* text,int x,int y,int cvenum,double fontScale,cv::Scalar sc
     cv::Mat image=TGOMAT;
     //复制
     cv::Mat Timage=image.clone();
+    //修正
+    double scalewidth=TGI.getScaleWidth(),scaleheight=TGI.getScaleHeight();
+    x=(int)x/scalewidth;
+    y=(int)y/scaleheight;
     //写字
     cv::putText(Timage,text,cv::Point(x,y),cvenum,fontScale,scalar,thickness,linetype);
     //写回

@@ -1,6 +1,10 @@
 #include "ColorAdjust.h"
 
-//光感
+/**
+ * 光感
+ * @param alpha 缩放系数
+ * @param beta 加法常数
+*/
 void LightSense(double alpha,int beta){
     //读取
     cv::Mat image=TGOMAT,LSimage;
@@ -15,7 +19,10 @@ void CurveAdjustment(){
     
 }
 
-//饱和度
+/**
+ * 饱和度
+ * @param factor 饱和因子
+*/
 void Saturation(double factor){
     //读取
     cv::Mat image=TGOMAT,Satimage;
@@ -134,7 +141,11 @@ void CurveTone(int channel,std::vector<int> origin,std::vector<int> target){
     TGI.setCurMat(CTimage);
 }
 
-//rgb [0,1,2]
+/**
+ * 曲线调整(曲线调色)
+ * @param table 转换表
+ * @param channels 通道个数
+*/
 void CurveTone(uchar table[][256],int channels=3){
     //读取
     cv::Mat image=TGOMAT;

@@ -1,6 +1,9 @@
 #include "ImageEdit.h"
 
-//裁剪
+/**
+ * 裁剪
+ * @param cropRect 裁剪窗口
+*/
 void Composition(cv::Rect& cropRect)
 {   
     //读取
@@ -25,18 +28,33 @@ void Composition(cv::Rect& cropRect)
     TGI.Comfirm();
 }
 
+/**
+ * 裁剪
+ * @param cropRect 裁剪窗口
+*/
 void Composition(cv::Rect&& cropRect){
     Composition(std::move(cropRect));
 }
 
+/**
+ * 裁剪
+ * @param x 裁剪窗口的左上角x坐标
+ * @param y 裁剪窗口的左上角y坐标
+ * @param width 裁剪窗口的宽度
+ * @param height 裁剪窗口的高度
+*/
 void Composition(int x,int y,int width,int height)
 {
     cv::Rect cropRect(x,y,width,height);
     Composition(cropRect);
 }
 
-//旋转
-//angle>=-45&&angle<=45&&flag=true,旋转时会变大
+/**
+ * 旋转
+ * angle>=-45&&angle<=45&&flag=true,旋转时会变大
+ * @param angle 旋转角度
+ * @param flag 是否缩放
+*/
 void Spin(double angle,bool flag)
 {
     auto getScale=[&]()->double{
@@ -57,7 +75,11 @@ void Spin(double angle,bool flag)
     TGI.setCurMat(SpinedImage);
 }
 
-//曝光
+/**
+ * 曝光
+ * @param alpha 乘法因子
+ * @param beta 加法常数
+*/
 void Exposure(double alpha,int beta){
     //读取
     cv::Mat image=TGOMAT,Expimage;
@@ -67,7 +89,10 @@ void Exposure(double alpha,int beta){
     TGI.setCurMat(Expimage);
 }
 
-//亮度
+/**
+ * 亮度
+ * @param bright 亮度的增益或者减益
+*/
 void Brightness(int bright){
     //读取
     cv::Mat image=TGOMAT;
@@ -77,7 +102,10 @@ void Brightness(int bright){
     TGI.setCurMat(Briimage);
 }
 
-//对比度
+/**
+ * 对比度
+ * @param contrast 对比度因子
+*/
 void ContrastRatio(double contrast){
     //读取
     cv::Mat image=TGOMAT;
@@ -87,7 +115,10 @@ void ContrastRatio(double contrast){
     TGI.setCurMat(Conimage);
 }
 
-//直方图均衡化
+/**
+ * 直方图均衡化
+ * 对亮度通道 
+*/
 void HistogramEqualization(){
     cv::Mat image = TGOMAT;
     cv::Mat hsvImage;
@@ -106,7 +137,11 @@ void HistogramEqualization(){
     TGI.setCurMat(hsvImage);
 }
 
-//锐化
+/**
+ * 锐化
+ * 拉普拉斯滤波器
+ * @param level 锐化因子
+*/
 void Sharpen(int level){
     //读取
     cv::Mat image=TGOMAT;
@@ -122,7 +157,11 @@ void Sharpen(int level){
     TGI.setCurMat(Shaimage);
 }
 
-//平滑(高斯滤波)
+/**
+ * 平滑
+ * 高斯滤波
+ * @param level 平滑标准差
+*/
 void Smooth(double level){
     //读取
     cv::Mat image=TGOMAT,Smoimage;
@@ -136,7 +175,10 @@ void Smooth(double level){
     TGI.setCurMat(Smoimage);
 }
 
-//色温(RGB)
+/**
+ * 色温(RGB)
+ * @param temperature 色温因子
+*/
 void ColorTemperature(int temperature){
     //计算增量
     double red=temperature*1.0/100;
@@ -157,7 +199,10 @@ void ColorTemperature(int temperature){
     TGI.setCurMat(CTimage);
 }
 
-//色调
+/**
+ * 色调
+ * @param tone 色调因子 
+*/
 void Tone(int tone){
     //读取
     cv::Mat image=TGOMAT,Tonimage;
