@@ -484,9 +484,9 @@ void MainInterface::MakeBeauty()
     });
 }
 
-void MainInterface::MatToShow()
-{   
-    //更新显示窗口数据
+//更新显示窗口数据
+void MainInterface::UpdateShow()
+{
     /*TGI.setX(this->geometry().x()+ui->widget_2->pos().x()+ui->label_show->geometry().x());
     TGI.setY(this->geometry().y()+ui->widget_2->pos().y()+ui->label_show->geometry().y()+ui->menubar->geometry().height());*/
     auto p=ui->widget_2->mapToGlobal(ui->label_show->pos());
@@ -494,7 +494,11 @@ void MainInterface::MatToShow()
     TGI.setY(p.y());
     TGI.setWidth(ui->label_show->geometry().width());
     TGI.setHeight(ui->label_show->geometry().height());
+}
 
+void MainInterface::MatToShow()
+{   
+    UpdateShow();
     if(TGMAT.empty()){
         #ifdef DEBUG
             qDebug()<<"CurMat Empty";
@@ -514,11 +518,7 @@ void MainInterface::MatToShow()
     if(pixmap.width()<=ui->label_show->geometry().width()&&pixmap.height()<=ui->label_show->geometry().height()){
         ui->label_show->setFixedSize(pixmap.size());
         ui->label_show->setPixmap(pixmap);
-        auto p=ui->widget_2->mapToGlobal(ui->label_show->pos());
-        TGI.setX(p.x());
-        TGI.setY(p.y());
-        TGI.setWidth(ui->label_show->geometry().width());
-        TGI.setHeight(ui->label_show->geometry().height());
+        UpdateShow();
         TGI.setScaleWidth(1.0);
         TGI.setScaleHeight(1.0);
         return ;

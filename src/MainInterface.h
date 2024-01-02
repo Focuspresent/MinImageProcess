@@ -57,6 +57,7 @@ public slots:
     void MakeSaturation();
     void MakeBeauty();
     void MatToShow();
+    void UpdateShow();
     void DeleteButton();
 private:
     Ui_MainInterface* ui;
