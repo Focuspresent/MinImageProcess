@@ -354,6 +354,23 @@ public:
         setHeight(qrect.height());
     }
 
+    //设置缩放因子
+    void setScaleWidth(double scalewidth){
+        this->scalewidth=scalewidth;
+    }
+
+    void setScaleHeight(double scaleheight){
+        this->scaleheight=scaleheight;
+    }
+
+    //读取缩放因子
+    double getScaleWidth(){
+        return scalewidth;
+    }
+
+    double getScaleHeight(){
+        return scaleheight;
+    }
 private:
     //私有化
     Tool()=default;
@@ -369,6 +386,8 @@ private:
     //显示窗口的数据
     int x,y;
     int width,height;
+    //缩放图片的缩放因子
+    double scalewidth,scaleheight;
 };
 
 #endif //TOOL_HPP

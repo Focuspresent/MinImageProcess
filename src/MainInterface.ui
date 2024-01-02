@@ -49,7 +49,7 @@ border-image: url(src/res/darkgray.png);
        <item>
         <widget class="QPushButton" name="pb_open">
          <property name="styleSheet">
-          <string notr="true">image:url(src/res/open.png);</string>
+          <string notr="true">image: url(src/res/open.png);</string>
          </property>
          <property name="text">
           <string/>
@@ -123,6 +123,12 @@ border-image: url(src/res/darkgray.png);
           <size>
            <width>400</width>
            <height>400</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>950</width>
+           <height>16777215</height>
           </size>
          </property>
          <property name="styleSheet">
@@ -307,7 +313,7 @@ border-image: url(src/res/darkgray.png);
   </action>
  </widget>
  <resources>
-  <include location="res.qrc"/>
+  <include location="../res.qrc"/>
  </resources>
  <connections/>
 </ui>

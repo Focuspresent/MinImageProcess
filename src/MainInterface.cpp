@@ -92,6 +92,7 @@ void MainInterface::CreateQCOM()
         return ;
     }
     //创建界面
+    MatToShow();
     if(ui_qcom!=nullptr){
         delete ui_qcom;
         ui_qcom=nullptr;
@@ -485,6 +486,15 @@ void MainInterface::MakeBeauty()
 
 void MainInterface::MatToShow()
 {   
+    //更新显示窗口数据
+    /*TGI.setX(this->geometry().x()+ui->widget_2->pos().x()+ui->label_show->geometry().x());
+    TGI.setY(this->geometry().y()+ui->widget_2->pos().y()+ui->label_show->geometry().y()+ui->menubar->geometry().height());*/
+    auto p=ui->widget_2->mapToGlobal(ui->label_show->pos());
+    TGI.setX(p.x());
+    TGI.setY(p.y());
+    TGI.setWidth(ui->label_show->geometry().width());
+    TGI.setHeight(ui->label_show->geometry().height());
+
     if(TGMAT.empty()){
         #ifdef DEBUG
             qDebug()<<"CurMat Empty";
@@ -499,14 +509,12 @@ void MainInterface::MatToShow()
         display=QImage(TGMAT.data,TGMAT.cols,TGMAT.rows,static_cast<int>(TGMAT.step),QImage::Format_RGBA8888);
     }
     //放到组件中
-    ui->label_show->setPixmap(QPixmap::fromImage(display));
-    //适应
-    ui->label_show->setFixedSize(display.size());
-    //更新显示窗口数据
-    TGI.setX(this->geometry().x()+ui->widget_2->pos().x()+ui->label_show->geometry().x());
-    TGI.setY(this->geometry().y()+ui->widget_2->pos().y()+ui->label_show->geometry().y()+ui->menubar->geometry().height());
-    TGI.setWidth(ui->label_show->geometry().width());
-    TGI.setHeight(ui->label_show->geometry().height());
+    QPixmap pixmap=QPixmap::fromImage(display);
+    pixmap.scaled(ui->label_show->size(),Qt::KeepAspectRatio,Qt::SmoothTransformation);
+    ui->label_show->setPixmap(pixmap);
+    ui->label_show->setScaledContents(true);
+    TGI.setScaleWidth(1.0*ui->label_show->geometry().width()/TGOMAT.rows);
+    TGI.setScaleHeight(1.0*ui->label_show->geometry().height()/TGOMAT.cols);
 }
 
 void MainInterface::mousePressEvent(QMouseEvent* event)

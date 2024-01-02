@@ -108,8 +108,13 @@ QPoint QComposition::BottomRight()
 }
 
 void QComposition::CropCurMat()
-{
-    Composition(geometry().x()-TGI.X(),geometry().y()-TGI.Y(),geometry().width(),geometry().height());
+{   
+    double scalewidth=TGI.getScaleWidth(),scaleheight=TGI.getScaleHeight();
+    double x=geometry().x()-TGI.X(),y=geometry().y()-TGI.Y(),width=geometry().width(),height=geometry().height();
+    x*=TGOMAT.cols;x/=width;x*=scalewidth;width/=scalewidth;
+    y*=TGOMAT.rows;y/=height;y*=scaleheight;height/=scaleheight;
+    std::cout<<x<<" "<<y<<" "<<width<<" "<<height<<std::endl;
+    Composition((int)x,(int)y,(int)width,(int)height);
     emit ChangeCurMat();
 }
 
