@@ -111,9 +111,13 @@ void QComposition::CropCurMat()
 {   
     double scalewidth=TGI.getScaleWidth(),scaleheight=TGI.getScaleHeight();
     double x=geometry().x()-TGI.X(),y=geometry().y()-TGI.Y(),width=geometry().width(),height=geometry().height();
-    x*=TGOMAT.cols;x/=width;x*=scalewidth;width/=scalewidth;
-    y*=TGOMAT.rows;y/=height;y*=scaleheight;height/=scaleheight;
+    x/=scalewidth;width/=scalewidth;
+    y/=scaleheight;height/=scaleheight;
+#ifdef DEBUG
     std::cout<<x<<" "<<y<<" "<<width<<" "<<height<<std::endl;
+    std::cout<<TGOMAT.cols<<" "<<TGOMAT.rows<<std::endl;
+    std::cout<<x+width<<" "<<y+height<<std::endl;
+#endif
     Composition((int)x,(int)y,(int)width,(int)height);
     emit ChangeCurMat();
 }

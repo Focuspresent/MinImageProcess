@@ -526,8 +526,8 @@ void MainInterface::MatToShow()
     pixmap.scaled(ui->label_show->size(),Qt::KeepAspectRatio,Qt::SmoothTransformation);
     ui->label_show->setPixmap(pixmap);
     ui->label_show->setScaledContents(true);
-    TGI.setScaleWidth(1.0*ui->label_show->geometry().width()/TGOMAT.rows);
-    TGI.setScaleHeight(1.0*ui->label_show->geometry().height()/TGOMAT.cols);
+    TGI.setScaleWidth(1.0*ui->label_show->geometry().width()/TGOMAT.cols);
+    TGI.setScaleHeight(1.0*ui->label_show->geometry().height()/TGOMAT.rows);
 }
 
 void MainInterface::mousePressEvent(QMouseEvent* event)

@@ -60,8 +60,8 @@ void Text(const char* text,int x,int y,int cvenum,double fontScale,cv::Scalar sc
     cv::Mat Timage=image.clone();
     //修正
     double scalewidth=TGI.getScaleWidth(),scaleheight=TGI.getScaleHeight();
-    x=(int)x/scalewidth;
-    y=(int)y/scaleheight;
+    x=(int)(1.0*x/scalewidth);
+    y=(int)(1.0*y/scaleheight);
     //写字
     cv::putText(Timage,text,cv::Point(x,y),cvenum,fontScale,scalar,thickness,linetype);
     //写回
