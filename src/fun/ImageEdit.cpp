@@ -8,7 +8,7 @@ void Composition(cv::Rect& cropRect)
 {   
     //读取
     cv::Mat image=TGOMAT;
-#ifndef FUN
+#ifdef FUN
     //裁剪
     cv::Mat cropImage=image(cropRect);
 #else

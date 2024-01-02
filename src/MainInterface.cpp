@@ -510,6 +510,19 @@ void MainInterface::MatToShow()
     }
     //放到组件中
     QPixmap pixmap=QPixmap::fromImage(display);
+    //如果小于显示窗口的长宽
+    if(pixmap.width()<=ui->label_show->geometry().width()&&pixmap.height()<=ui->label_show->geometry().height()){
+        ui->label_show->setFixedSize(pixmap.size());
+        ui->label_show->setPixmap(pixmap);
+        auto p=ui->widget_2->mapToGlobal(ui->label_show->pos());
+        TGI.setX(p.x());
+        TGI.setY(p.y());
+        TGI.setWidth(ui->label_show->geometry().width());
+        TGI.setHeight(ui->label_show->geometry().height());
+        TGI.setScaleWidth(1.0);
+        TGI.setScaleHeight(1.0);
+        return ;
+    }
     pixmap.scaled(ui->label_show->size(),Qt::KeepAspectRatio,Qt::SmoothTransformation);
     ui->label_show->setPixmap(pixmap);
     ui->label_show->setScaledContents(true);
