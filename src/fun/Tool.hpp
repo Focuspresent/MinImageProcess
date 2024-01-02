@@ -12,6 +12,7 @@
 #include <QRect>
 #include <QPoint>
 #include <bits/stdc++.h>
+#include "Config.h"
 
 #define TGI Tool::getInstance()
 #define TGMAT Tool::getInstance().getCurMat() 
@@ -21,8 +22,6 @@
 #define TGQBL Tool::getInstance().BottomLeft()
 #define TGQBR Tool::getInstance().BottomRight()
 #define NVal 3
-#define FUN
-#define DEBUG
 
 class Tool{
 public:

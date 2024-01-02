@@ -23,6 +23,19 @@ aux_source_directory(. SRCS)
 aux_source_directory(./fun SRCS)
 aux_source_directory(./interface SRCS)
 
+#配置选项
+option(FUN 
+    "Whether to use a third-party library"
+    ON
+)
+option(DEBUG
+    "Whether to output related information"
+    ON
+)
+
+#生成配置文件
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Config.h.in ${CMAKE_CURRENT_SOURCE_DIR}/Config.h)
+
 #生成库
 add_library(${LIB_NAME}
     ${SRCS}
@@ -32,6 +45,7 @@ add_library(${LIB_NAME}
 set(LIB_INCLUDE "${CMAKE_CURRENT_BINARY_DIR}/${LIB_NAME}_autogen/include")
 target_include_directories(${LIB_NAME} PUBLIC ${LIB_INCLUDE})
 target_include_directories(${LIB_NAME} PUBLIC ${OpenCV_INCLUDE_DIRS})
+target_include_directories(${LIB_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_include_directories(${LIB_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/fun)
 target_include_directories(${LIB_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/interface)
 #连接第三库
