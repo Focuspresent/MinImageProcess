@@ -30,6 +30,8 @@
 |-- res
 `-- src
     |-- CMakeLists.txt
+    |-- Config.h
+    |-- Config.h.in
     |-- MainInterface.cpp
     |-- MainInterface.h
     |-- MainInterface.ui
@@ -53,7 +55,11 @@
     |   |-- QHSL.h
     |   |-- QHSL.ui
     |   |-- QText.cpp
-    |   `-- QText.h
+    |   |-- QText.h
+    |   |-- QTextHelp.cpp
+    |   |-- QTextHelp.h
+    |   `-- QTextHelp.ui
+    |-- res
     |-- res.qrc
     `-- test
         |-- CMakeLists.txt
