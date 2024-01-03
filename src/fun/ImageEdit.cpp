@@ -12,7 +12,7 @@ void Composition(cv::Rect& cropRect)
     //裁剪
     cv::Mat cropImage=image(cropRect);
 #else
-    cv::Mat cropImage(cropRect.height, cropRect.width, CV_8UC3);
+    cv::Mat cropImage(cropRect.height, cropRect.width, image.type());
     for (int i = cropRect.x; i < cropRect.x + cropRect.width; i++) {
         for (int j = cropRect.y; j < cropRect.y + cropRect.height; j++) {
             cropImage.at<cv::Vec3b>(j - cropRect.y, i - cropRect.x) = image.at<cv::Vec3b>(j, i);
@@ -177,26 +177,30 @@ void Smooth(double level){
 
 /**
  * 色温(RGB)
- * @param temperature 色温因子
+ * @param value 色温因子
 */
-void ColorTemperature(int temperature){
-    //计算增量
-    double red=temperature*1.0/100;
-    double blue=-temperature*1.0/100;
-    //输出图像
-    cv::Mat CTimage;
-    //分离
-    std::vector<cv::Mat> channels;
-    cv::split(TGOMAT,channels);
-    //增量计算
-    channels[0]+=red;
-    channels[2]+=blue;
-    //合并
-    cv::merge(channels,CTimage);
-    //保证数据范围
-    cv::normalize(CTimage,CTimage,0,255,cv::NORM_MINMAX);
+void ColorTemperature(int value){
+    //读取
+    cv::Mat srcImage=TGOMAT;
+
+     //设置一个和原图一模一样的原图，但是像素值都置0
+    cv::Mat image = cv::Mat::zeros(srcImage.size(), srcImage.type());
+    int row = srcImage.rows;
+    int col = srcImage.cols;
+    for (int i = 0; i < row; i++)
+    {
+        for (int j = 0; j < col; j++)
+        {
+            image.at<cv::Vec3b>(i, j)[0] = cv::saturate_cast<uchar>(srcImage.at<cv::Vec3b>(i, j)[0] - value );//红-1
+            image.at<cv::Vec3b>(i, j)[1] = cv::saturate_cast<uchar>(srcImage.at<cv::Vec3b>(i, j)[1] - value );//绿-1
+            image.at<cv::Vec3b>(i, j)[2] = cv::saturate_cast<uchar>(srcImage.at<cv::Vec3b>(i, j)[2] );//蓝
+            /* //处理alpha通道
+            image.at<cv::Vec4b>(i, j)[3] = srcImage.at<cv::Vec4b>(i, j)[3];//alpha通道直接用原图的值不变 */
+        }
+    }
+    
     //写回
-    TGI.setCurMat(CTimage);
+    TGI.setCurMat(image);
 }
 
 /**

@@ -80,7 +80,7 @@ void Watermark(){
     cv::Mat overlay = srcImage.clone();
 
     // 计算合适的字体大小，使水印适应不同图像大小
-    int fontSize = std::max(oriImg.rows, oriImg.cols) / 180;
+    int fontSize = std::min(oriImg.rows, oriImg.cols) / 180;
     //选择字体样式
     int fontFace= cv::FONT_HERSHEY_SCRIPT_COMPLEX;
     //粗细
@@ -91,7 +91,7 @@ void Watermark(){
     cv::Size textSize = cv::getTextSize(text, fontFace, fontSize, thickness, nullptr);
 
     // 在图像上添加水印文本
-    putText(overlay,text, cv::Point(0, textSize.height), fontFace, fontSize, cv::Scalar(0, 0, 255), thickness);
+    putText(overlay,text, cv::Point(-textSize.width/6, textSize.height), fontFace, fontSize, cv::Scalar(0, 0, 255), thickness);
     addWeighted(overlay, 0.3, oriImg, 1 - 0.3, 0, oriImg);
 
     // 将添加水印后的图像保存在dstImage变量中

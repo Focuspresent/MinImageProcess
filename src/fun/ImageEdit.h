@@ -17,7 +17,7 @@ void ContrastRatio(double contrast);
 void HistogramEqualization();
 void Sharpen(int level);
 void Smooth(double level);
-void ColorTemperature(int temperature);
+void ColorTemperature(int value);
 void Tone(int tone);
 
 #endif //IMAGEEDIT_H
