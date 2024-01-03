@@ -11,6 +11,7 @@ MainInterface::MainInterface(QWidget* parent)
     ui_qhsl=nullptr;
     ui_qct=nullptr;
     ui_qtext=nullptr;
+    ui_qtexthelp=nullptr;
     bt_comfirm=nullptr;
     bt_cancel=nullptr;
     bt_show=nullptr;
@@ -202,6 +203,14 @@ void MainInterface::CreateQT()
     ui_qtext=new QText();
     ui_qtext->show();
 
+    //创建文本选项
+    if(ui_qtexthelp!=nullptr){
+        delete ui_qtexthelp;
+        ui_qtexthelp=nullptr;
+    }
+    ui_qtexthelp=new QTextHelp();
+    ui_qtexthelp->show();
+
     //确定和取消
     CreateComAndCan(false);
 
@@ -209,7 +218,7 @@ void MainInterface::CreateQT()
         QRect geo = ui_qtext->geometry();
         int x=geo.topLeft().x();
         int y=geo.topLeft().y();
-        Text(ui_qtext->text().toLocal8Bit(),x-TGI.X(),y-TGI.Y()+geo.height(),cv::FONT_HERSHEY_SIMPLEX,1.0,cv::Scalar(255,255,255));
+        Text(ui_qtext->text().toLocal8Bit(),x-TGI.X(),y-TGI.Y()+geo.height(),ui_qtexthelp->fontFace,ui_qtexthelp->fontScale,ui_qtexthelp->QColorToScalar());
         MatToShow();
         TGI.Comfirm();
         DeleteButton();
@@ -572,6 +581,7 @@ void MainInterface::DeleteButton()
     if(ui_qhsl) delete ui_qhsl;
     if(ui_qct) delete ui_qct;
     if(ui_qtext) delete ui_qtext;
+    if(ui_qtexthelp) delete ui_qtexthelp;
     if(slider) delete slider;
     if(lineedit) delete lineedit;
     lineedit=nullptr;
@@ -580,6 +590,7 @@ void MainInterface::DeleteButton()
     ui_qhsl=nullptr;
     ui_qct=nullptr;
     ui_qtext=nullptr;
+    ui_qtexthelp=nullptr;
     bt_comfirm=bt_cancel=bt_show=nullptr;
 }
 

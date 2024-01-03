@@ -20,6 +20,7 @@
 #include "QHSL.h"
 #include "QCurveTone.h"
 #include "QText.h"
+#include "QTextHelp.h"
 #include "ImageEdit.h"
 #include "ColorAdjust.h"
 #include "Others.h"
@@ -65,6 +66,7 @@ private:
     QHSL* ui_qhsl;
     QCurveTone* ui_qct;
     QText* ui_qtext;
+    QTextHelp* ui_qtexthelp;
     QPushButton *bt_comfirm,*bt_cancel,*bt_show;
     QSlider* slider;
     QLineEdit* lineedit;

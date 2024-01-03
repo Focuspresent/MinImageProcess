@@ -4,6 +4,7 @@ QText::QText(QWidget* parent)
     :QLineEdit(parent)
 {
     setWindowFlags(Qt::FramelessWindowHint);
+    setWindowOpacity(0.5);
     setStyleSheet("QLineEdit { background-color: transparent; }");
     setStyleSheet("QLineEdit { border: 1px solid black; }");
 }
