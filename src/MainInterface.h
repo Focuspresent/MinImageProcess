@@ -57,6 +57,7 @@ public slots:
     void MakeLightSense();
     void MakeSaturation();
     void MakeBeauty();
+    void MakeWatermark();
     void MatToShow();
     void UpdateShow();
     void DeleteButton();

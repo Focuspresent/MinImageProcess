@@ -45,6 +45,7 @@ MainInterface::MainInterface(QWidget* parent)
     connect(ui->ac_satadj,SIGNAL(triggered()),this,SLOT(MakeSaturation()));
     connect(ui->ac_beauty,SIGNAL(triggered()),this,SLOT(MakeBeauty()));
     connect(ui->pb_beauty,SIGNAL(clicked()),this,SLOT(MakeBeauty()));
+    connect(ui->ac_watermark,SIGNAL(triggered()),this,SLOT(MakeWatermark()));
 }
 
 MainInterface::~MainInterface()
@@ -496,6 +497,22 @@ void MainInterface::MakeBeauty()
         Beauty(pos);
         MatToShow();
     });
+}
+
+void MainInterface::MakeWatermark(){
+    if(TGMAT.empty()){
+        #ifdef DEBUG
+            qDebug()<<"CurMat Empty";
+        #endif 
+        return ;
+    }
+    //确定和取消
+    CreateComAndCan();
+
+    //添加水印
+    Watermark();
+    //显示
+    MatToShow();
 }
 
 //更新显示窗口数据

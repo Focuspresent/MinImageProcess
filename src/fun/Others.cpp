@@ -67,3 +67,39 @@ void Text(const char* text,int x,int y,int cvenum,double fontScale,cv::Scalar sc
     //写回
     TGI.setCurMat(Timage);
 }
+
+/**
+ * 水印
+*/
+void Watermark(){
+    //读取
+    cv::Mat srcImage=TGOMAT;
+    // 用来放之后拿来图层叠加的原始图片
+    cv::Mat oriImg = srcImage.clone();
+    // 创建水印图层
+    cv::Mat overlay = srcImage.clone();
+
+    // 计算合适的字体大小，使水印适应不同图像大小
+    int fontSize = std::max(oriImg.rows, oriImg.cols) / 180;
+    //选择字体样式
+    int fontFace= cv::FONT_HERSHEY_SCRIPT_COMPLEX;
+    //粗细
+    int thickness=2;
+    //文字
+    std::string text="by:sghb and zdc";
+    //计算添加水印的文本框大小
+    cv::Size textSize = cv::getTextSize(text, fontFace, fontSize, thickness, nullptr);
+
+    // 在图像上添加水印文本
+    putText(overlay,text, cv::Point(0, textSize.height), fontFace, fontSize, cv::Scalar(0, 0, 255), thickness);
+    addWeighted(overlay, 0.3, oriImg, 1 - 0.3, 0, oriImg);
+
+    // 将添加水印后的图像保存在dstImage变量中
+    cv::Mat dstImage = oriImg.clone();
+
+#ifdef DEBUG
+    cv::imshow("watermark",dstImage);
+#endif
+    //写回
+    TGI.setCurMat(dstImage);
+}
