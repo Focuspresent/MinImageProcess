@@ -67,6 +67,10 @@ std::vector<QPoint>::iterator QCurve::add(int x,int y)
     return it;
 }
 
+std::vector<QPoint>::iterator del(int x,int y){
+
+}
+
 int QCurve::calcCurve(double* output_y)
 {
     //小于2
@@ -188,6 +192,11 @@ void QCurve::paintEvent(QPaintEvent* event)
     }
 }
 
+bool QCurve::mouseDel(int x,int y){
+    y=255-y;
+    return deleteQPoint(QPoint(x,y));
+}
+
 void QCurve::mouseDown(int x,int y)
 {
     y = 255 - y;
@@ -291,13 +300,14 @@ int QCurve::addQPoint(const QPoint& p)
 
 int QCurve::deleteQPoint(const QPoint& p)
 {
+    if(qpoints.size()<=2) return 0;
     std::vector<QPoint>::iterator iter;
     iter=find(p.x(),p.y());
     if(iter!=qpoints.end()){
         if(current==iter){
             current=qpoints.end();
         }
-        qpoints.erase(iter);
+        current=qpoints.erase(iter);
         return 1;
     }
     return 0;

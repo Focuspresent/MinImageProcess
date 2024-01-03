@@ -30,6 +30,8 @@ public:
     void mouseDown(int x,int y);
     bool mouseMove(int x,int y);
     void mouseUp(int x,int y);
+    bool mouseDel(int x,int y);
+
 protected:
     void paintEvent(QPaintEvent *event) override;
     /* void mousePressEvent(QMouseEvent* event) override;
