@@ -115,6 +115,7 @@ void QCurveTone::mousePressEvent(QMouseEvent* event)
     if(event->buttons()==Qt::RightButton){
         if(current->mouseDel(x,y)){
             update();
+            ModfiyCurMat();
         }
     }else if(x>=0&&x<=255&&y>=0&&y<=255){
         current->mouseDown(x,y);    

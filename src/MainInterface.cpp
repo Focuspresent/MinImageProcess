@@ -28,8 +28,11 @@ MainInterface::MainInterface(QWidget* parent)
     connect(ui->ac_hsl,SIGNAL(triggered()),this,SLOT(CreateQHSL()));
     connect(ui->ac_curtone,SIGNAL(triggered()),this,SLOT(CreateQCT()));
     connect(ui->ac_curadj,SIGNAL(triggered()),this,SLOT(CreateQCT()));
+    connect(ui->pb_curve,SIGNAL(clicked()),this,SLOT(CreateQCT()));
     connect(ui->ac_text,SIGNAL(triggered()),this,SLOT(CreateQT()));
+    connect(ui->pb_text,SIGNAL(clicked()),this,SLOT(CreateQT()));
     connect(ui->ac_spin,SIGNAL(triggered()),this,SLOT(MakeSpin()));
+    connect(ui->pb_spin,SIGNAL(clicked()),this,SLOT(MakeSpin()));
     connect(ui->ac_exp,SIGNAL(triggered()),this,SLOT(MakeExposure()));
     connect(ui->ac_bri,SIGNAL(triggered()),this,SLOT(MakeBrightness()));
     connect(ui->ac_conra,SIGNAL(triggered()),this,SLOT(MakeContrastRatio()));
@@ -41,6 +44,7 @@ MainInterface::MainInterface(QWidget* parent)
     connect(ui->ac_lis,SIGNAL(triggered()),this,SLOT(MakeLightSense()));
     connect(ui->ac_satadj,SIGNAL(triggered()),this,SLOT(MakeSaturation()));
     connect(ui->ac_beauty,SIGNAL(triggered()),this,SLOT(MakeBeauty()));
+    connect(ui->pb_beauty,SIGNAL(clicked()),this,SLOT(MakeBeauty()));
 }
 
 MainInterface::~MainInterface()
@@ -189,6 +193,7 @@ void MainInterface::CreateQCT()
 
 void MainInterface::CreateQT()
 {
+    UpdateShow();
     if(TGMAT.empty()){
         #ifdef DEBUG
             qDebug()<<"CurMat Empty";
