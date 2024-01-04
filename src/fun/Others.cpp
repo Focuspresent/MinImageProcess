@@ -11,7 +11,7 @@ void Beauty(int value)
     //创建人脸检测器
     cv::CascadeClassifier cascade;
     //加载采样文件
-    cascade.load("./res/haarcascade_frontalface_default.xml");
+    cascade.load("src/res/haarcascade_frontalface_default.xml");
     //读取文件
     cv::Mat image=TGOMAT;
     //复制

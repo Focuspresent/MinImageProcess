@@ -449,6 +449,7 @@ void MainInterface::MakeLightSense()
     connect(slider,&QSlider::valueChanged,[this,alphaMin,alphaMax,betaMin,betaMax,tmi,tma](int pos)->void{
         double alpha=(double)(alphaMax-alphaMin)*((double)(pos-tmi)/(tma-tmi))+alphaMin;
         int beta=(int)(betaMax-betaMin)*((double)(pos-tmi)/(tma-tmi))+betaMin;
+        if(!pos) {alpha=1.0;beta=0;}
         LightSense(alpha,beta);
         MatToShow();
     });
