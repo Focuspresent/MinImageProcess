@@ -68,7 +68,7 @@ std::vector<QPoint>::iterator QCurve::add(int x,int y)
 }
 
 std::vector<QPoint>::iterator del(int x,int y){
-
+    return {};
 }
 
 int QCurve::calcCurve(double* output_y)
